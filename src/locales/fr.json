@@ -59,5 +59,15 @@
   "NO_PIN_ACCESS": "Pas d'accès PIN",
   "SEE_MORE": "Voir plus",
   "Welcome_SK_TV": "Bienvenue sur SK TV",
-  "PLEASE_ENTER_VALID_PIN" : "Veuillez entrer un code PIN valide !"
+  "PLEASE_ENTER_VALID_PIN": "Veuillez entrer un code PIN valide !",
+  "CHANGEPROFILE": "Changer de profil",
+  "SAVE": "Enregistrer",
+  "FULLNAME": "Nom complet",
+  "PLEASE_ENTER_PASSWORD": "Veuillez entrer le mot de passe",
+  "PLEASE_ENTER_FULL_NAME": "Veuillez entrer le nom complet",
+  "FULL_NAME_2_CHAR_OR_MORE": "Le nom complet doit contenir au moins 2 caractères",
+  "OPEN_CAMERA": "Ouvrir la caméra",
+  "OPEN_GALLERY": "Ouvrir la galerie",
+  "Cancel": "Annuler",
+  "LOGOUTALERT": "Êtes-vous sûr de vouloir vous déconnecter ?"
 }

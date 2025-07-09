@@ -1,12 +1,13 @@
+
 export const ValidateEmail = email => {
   const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
   if (!email || email.trim() === '') {
-    return {isValid: false, message: 'Please enter email'};
+    return {isValid: false, message: 'PLEASE_ENTER_EMAIL'};
   }
   if (!emailRegex.test(email)) {
     return {
       isValid: false,
-      message: 'Please enter a valid email',
+      message: 'VALID_EMAIL',
     };
   }
   return {isValid: true, message: ''};
@@ -14,19 +15,19 @@ export const ValidateEmail = email => {
 
 export const ValidatePassword = password => {
   if (!password || password.trim() === '') {
-    return {isValid: false, message: 'Please enter password'};
+    return {isValid: false, message: 'PLEASE_ENTER_PASSWORD'};
   }
   return {isValid: true, message: ''};
 };
 
 export const ValidateFirstName = firstName => {
   if (!firstName || firstName.trim() === '') {
-    return {isValid: false, message: 'Please enter full name'};
+    return {isValid: false, message: 'PLEASE_ENTER_FULL_NAME'};
   }
   if (firstName.length < 2) {
     return {
       isValid: false,
-      message: 'Full name should contain 2 characters or more',
+      message: 'FULL_NAME_2_CHAR_OR_MORE',
     };
   }
   return {isValid: true, message: ''};

@@ -31,6 +31,7 @@ import {logout, login} from '../../contexts/AuthSlice';
 import {getSafeAreaMode} from '../../contexts/SafeAreaSlice';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import {getThemeMode} from '../../contexts/ThemeSlice';
+
 const EditProfileScreen = ({navigation}) => {
   const insets = useSelector(getSafeAreaMode);
   const insetss = useSafeAreaInsets();
@@ -69,11 +70,12 @@ const EditProfileScreen = ({navigation}) => {
 
   const callUpdateProfile = useCallback(async () => {
     setLoading(true);
+
     try {
       const response = await post({
         url: UPDATEPROFILE,
         params: {
-          fullname: firstName,
+          fullname: firstName.trim(),
           profileImage: profilePic
             ? profilePic
             : user?.profileImg
@@ -83,10 +85,7 @@ const EditProfileScreen = ({navigation}) => {
         token: user?.token,
       });
 
-      console.log('response is ----->', response?.code);
-
       if (response?.code == 200) {
-        console.log('Coming in the success', response);
         navigation.goBack();
       }
     } catch (error) {
@@ -101,11 +100,7 @@ const EditProfileScreen = ({navigation}) => {
 
     const isFirstNameValid = ValidateFirstName(firstName);
     const isEmailValid = ValidateEmail(email);
-    console.log('first error is ----->', isFirstNameValid);
-    console.log('email error is ----->', isEmailValid);
     if (!isFirstNameValid.isValid) {
-      console.log('error message is ----->', isFirstNameValid.message);
-
       setFirstNameErrorText(isFirstNameValid.message);
       return;
     }
@@ -153,7 +148,6 @@ const EditProfileScreen = ({navigation}) => {
     } else {
       const imageUri = result.assets[0].uri;
       // Handle the image URI, e.g., display it or upload it
-      console.log('Profile pic selected --->', imageUri);
 
       setProfilePic(imageUri);
       setModalVisible(false);
@@ -165,7 +159,8 @@ const EditProfileScreen = ({navigation}) => {
       bounces={false}
       contentContainerStyle={{
         flexGrow: 1,
-        backgroundColor: currentTheme == 'dark' ? Colors.screen_bgcolor : Colors.white ,
+        backgroundColor:
+          currentTheme == 'dark' ? Colors.screen_bgcolor : Colors.white,
       }}>
       <StatusBar
         backgroundColor="transparent"
@@ -195,7 +190,7 @@ const EditProfileScreen = ({navigation}) => {
                       : Colors.white,
                   },
                 ]}>
-                Open Camera
+                {t('OPEN_CAMERA')}
               </Text>
             </TouchableOpacity>
             <TouchableOpacity style={styles.optionBtn} onPress={openGallery}>
@@ -208,7 +203,7 @@ const EditProfileScreen = ({navigation}) => {
                       : Colors.white,
                   },
                 ]}>
-                Open Gallery
+                {t('OPEN_GALLERY')}
               </Text>
             </TouchableOpacity>
             <TouchableOpacity
@@ -217,7 +212,7 @@ const EditProfileScreen = ({navigation}) => {
                 {backgroundColor: Colors.blankContainer},
               ]}
               onPress={() => setModalVisible(false)}>
-              <Text style={[styles.optionText, {color: '#000'}]}>Cancel</Text>
+              <Text style={[styles.optionText, {color: '#000'}]}>{t('Cancel')}</Text>
             </TouchableOpacity>
           </View>
         </TouchableOpacity>
@@ -231,7 +226,7 @@ const EditProfileScreen = ({navigation}) => {
         <View style={{justifyContent: 'space-between', flex: 1}}>
           <View>
             <HeadersAppScreen
-              TitleName={'Edit Profile'}
+              TitleName={t('EDITPROFILE')}
               onPress={handleGoBack}
             />
             <View
@@ -277,7 +272,7 @@ const EditProfileScreen = ({navigation}) => {
                     fontSize: 16,
                     color: Colors.app_primary_color,
                   }}>
-                  Change Profile
+                  {t('CHANGEPROFILE')}
                 </Text>
                 <Image
                   style={{height: 20, width: 20}}
@@ -290,7 +285,7 @@ const EditProfileScreen = ({navigation}) => {
               <AuthTextInputField
                 ImageValue={require('../../assets/images/ico_user.png')}
                 value={firstName}
-                placeholder={t('Full name')}
+                placeholder={t('FULLNAME')}
                 ref={null}
                 placeholderTextColor={'#677D7D'}
                 keyboardType="default"
@@ -300,9 +295,10 @@ const EditProfileScreen = ({navigation}) => {
                 onChangeText={text => {
                   setEmailErrorText('');
                   setFirstNameErrorText('');
-                  setFirstName(text);
-                }}
-                errorMessage={firstNameErrorText}
+                  const filteredText = text.replace(/[^A-Za-z\s]/g, '');
+                  setFirstName(filteredText);
+                }} 
+                errorMessage={t(firstNameErrorText)}
                 blurOnSubmit={false}
               />
               {/* <View style={{height: 25}} />
@@ -333,12 +329,13 @@ const EditProfileScreen = ({navigation}) => {
                 returnKeyType="done"
                 // onSubmitEditing={() => phoneNumberRef?.current?.focus()}
                 maxLength={30}
-                onChangeText={text => {
-                  setEmailErrorText('');
-                  setFirstNameErrorText('');
-                  setEmail(text);
-                }}
-                errorMessage={emailErrorText}
+                editable={false}
+                // onChangeText={text => {
+                //   setEmailErrorText('');
+                //   setFirstNameErrorText('');
+                //   setEmail(text);
+                // }}
+                errorMessage={t(emailErrorText)}
                 blurOnSubmit={false}
               />
               <View style={{height: 25}} />
@@ -361,7 +358,7 @@ const EditProfileScreen = ({navigation}) => {
               onPress={() => {
                 handleSuccessButton();
               }}
-              title={'Save'}
+              title={t('SAVE')}
               backgroundColor="#4BB7B7"
             />
           </View>

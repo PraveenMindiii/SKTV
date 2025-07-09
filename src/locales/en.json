@@ -59,5 +59,16 @@
   "PLEAE_ENTER_CORRECT_PIN": "Please enter correct pin!",
   "NO_PIN_ACCESS": "No PIN Access",
   "SEE_MORE": "See more",
-  "PLEASE_ENTER_VALID_PIN" : "Please enter valid pin!"
+  "PLEASE_ENTER_VALID_PIN" : "Please enter valid pin!",
+  "CHANGEPROFILE": "Change Profile",
+  "Save": "Save",
+  "FULLNAME": "Full name",
+  "VALID_EMAIL": "Please enter a valid email",
+  "PLEASE_ENTER_PASSWORD": "Please enter password",
+  "PLEASE_ENTER_FULL_NAME": "Please enter full name",
+  "FULL_NAME_2_CHAR_OR_MORE": "Full name should contain 2 characters or more",
+  "OPEN_CAMERA": "Open Camera",
+  "OPEN_GALLERY": "Open Gallery",
+  "Cancel": "Cancel",
+  "LOGOUTALERT": "Are you sure you want to logout"
 }

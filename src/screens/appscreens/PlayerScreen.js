@@ -1,5 +1,12 @@
 import {useEffect, useState} from 'react';
-import {StyleSheet, View, BackHandler, Alert, TouchableOpacity, Image} from 'react-native';
+import {
+  StyleSheet,
+  View,
+  BackHandler,
+  Alert,
+  TouchableOpacity,
+  Image,
+} from 'react-native';
 import {WebView} from 'react-native-webview';
 import Colors, {themes} from '../../constants/Colors';
 import Orientation from 'react-native-orientation-locker';
@@ -19,6 +26,10 @@ function PlayerScreen({route, navigation}) {
   };
 
   useEffect(() => {
+    console.log('Url is ------->', route?.params?.videoUrl);
+  }, []);
+
+  useEffect(() => {
     const backHandler = BackHandler.addEventListener(
       'hardwareBackPress',
       backAction,
@@ -28,8 +39,8 @@ function PlayerScreen({route, navigation}) {
   }, []);
 
   const handleGoBack = () => {
-    console.log("Coming in the back action");
-    
+    console.log('Coming in the back action');
+
     backAction();
   };
 
@@ -48,17 +59,25 @@ function PlayerScreen({route, navigation}) {
           style={{
             width: 35,
             height: 35,
-            backgroundColor: "#000",
+            backgroundColor: '#000',
             borderRadius: 20,
-            justifyContent: "center",
-            alignItems: "center"
+            justifyContent: 'center',
+            alignItems: 'center',
           }}>
           {/* <HeadersAppScreen TitleName={''} onPress={handleGoBack} /> */}
-          <TouchableOpacity activeOpacity={1} onPress={handleGoBack} style={{width: "100%", height: "100%", justifyContent: "center", alignItems: "center"}}>
-              <Image
+          <TouchableOpacity
+            activeOpacity={1}
+            onPress={handleGoBack}
+            style={{
+              width: '100%',
+              height: '100%',
+              justifyContent: 'center',
+              alignItems: 'center',
+            }}>
+            <Image
               style={{width: 22, height: 20}}
               source={require('../../assets/images/ico_backbtn.png')}
-              />
+            />
           </TouchableOpacity>
         </View>
       </View>

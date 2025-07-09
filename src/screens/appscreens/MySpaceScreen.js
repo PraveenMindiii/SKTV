@@ -20,6 +20,7 @@ import {MYPROFILE} from '../../services/ApiEndPoints';
 import apiInstance, {get} from '../../services/ApiInstance';
 import {useFocusEffect} from '@react-navigation/native';
 import {getSafeAreaMode} from '../../contexts/SafeAreaSlice';
+
 const MySpaceScreen = ({navigation}) => {
   const {theme} = useTheme();
   const {t} = useTranslate();
@@ -30,7 +31,7 @@ const MySpaceScreen = ({navigation}) => {
   const [isLangugeVisibleModel, setIsLangugeVisibleModel] = useState(false);
   const [loading, setLoading] = useState(false);
   const [userData, setUserData] = useState({});
-  const [isToken, setIsToken] = useState(false);
+  const [isToken, setIsToken] = useState(user?.token);
 
   const handleLogout = () => {
     dispatch(logout());
@@ -41,7 +42,7 @@ const MySpaceScreen = ({navigation}) => {
       console.log('User data is ---->', user?.token);
       console.log('Profile pic', user?.profileImg);
 
-      if (user?.token) {
+      if (isToken) {
         callGetMyProfile();
         setIsToken(true);
       }
@@ -422,7 +423,7 @@ const MySpaceScreen = ({navigation}) => {
               onPress={() => {
                 Alert.alert(
                   '',
-                  'Are you sure you want to logout?',
+                 'Are you sure you want to logout?',
                   [
                     {
                       text: 'Cancel',

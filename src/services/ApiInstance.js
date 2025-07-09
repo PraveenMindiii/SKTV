@@ -3,8 +3,8 @@ import {Platform} from 'react-native';
 import Config from 'react-native-config';
 import DeviceInfo from 'react-native-device-info';
 
-const API_BASE_URL = 'http://192.168.1.83:3300/';
-// const API_BASE_URL = 'https://movies.mindiii.com/';
+// const API_BASE_URL = 'http://192.168.1.83:3300/';
+const API_BASE_URL = 'https://movies.mindiii.com/';
 
 const apiInstance = axios.create({
   baseURL: API_BASE_URL,

@@ -56,8 +56,19 @@
   "FOR_RESETTING_PIN": "Para restablecer su PIN, visite nuestra aplicación mySK",
   "PLEASE_ENTER_PIN": "¡Por favor ingresa el pin!",
   "PLEAE_ENTER_CORRECT_PIN": "¡Por favor ingrese el PIN correcto!",
-  "NO_PIN_ACCESS" : "Sin acceso mediante PIN",
+  "NO_PIN_ACCESS": "Sin acceso mediante PIN",
   "SEE_MORE": "Ver más",
   "Welcome_SK_TV": "Bienvenido a SK TV",
-  "PLEASE_ENTER_VALID_PIN" : "¡Por favor ingrese un PIN válido!"
+  "PLEASE_ENTER_VALID_PIN": "¡Por favor ingrese un PIN válido!",
+  "CHANGEPROFILE": "Cambiar perfil",
+  "SAVE": "Guardar",
+  "FULLNAME": "Nombre completo",
+  "VALID_EMAIL": "Por favor, introduce un correo electrónico válido",
+  "PLEASE_ENTER_PASSWORD": "Por favor, introduce la contraseña",
+  "PLEASE_ENTER_FULL_NAME": "Por favor, introduce el nombre completo",
+  "FULL_NAME_2_CHAR_OR_MORE": "El nombre completo debe tener 2 caracteres o más",
+  "OPEN_CAMERA": "Abrir cámara",
+  "OPEN_GALLERY": "Abrir galería",
+  "Cancel": "Cancelar",
+  "LOGOUTALERT": "¿Estás seguro de que quieres cerrar sesión?"
 }

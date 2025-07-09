@@ -60,6 +60,10 @@ const MovieTvShowsDetailsScreen = ({navigation, route}) => {
   const [loadMore, setLoadMore] = useState(true);
   const [listKey, setListKey] = useState(0);
   const [hasCalledEnd, setHasCalledEnd] = useState(false);
+
+  const [lastTriggeredOffset, setLastTriggeredOffset] = useState(0);
+  const screenHeight = Dimensions.get('window').height;
+
   useEffect(() => {
     callGetContentDetails();
   }, []);
@@ -110,6 +114,62 @@ const MovieTvShowsDetailsScreen = ({navigation, route}) => {
     }
   }, []);
 
+  // const onScroll = event => {
+  //   const {
+  //     contentOffset: {y},
+  //   } = event.nativeEvent;
+
+  //   // Trigger every time scroll crosses next multiple of 50% screen height (0.5 * screenHeight)
+  //   const triggerThreshold = 0.8 * screenHeight;
+
+  //   // Check if scrolled past next multiple of triggerThreshold
+  //   if (y >= lastTriggeredOffset + triggerThreshold) {
+  //     const nextTrigger = lastTriggeredOffset + triggerThreshold;
+
+  //     setLastTriggeredOffset(nextTrigger);
+  //     console.log('On scroll reached');
+
+  //     if (loadMore) {
+  //       console.log('Api condition reached');
+
+  //       setPageNo(pageNo + 1);
+  //       callGetEpisodesData(selectedSeason.season_id, pageNo + 1); // load next page
+  //     }
+  //   }
+  // };
+
+  const [isThrottled, setIsThrottled] = useState(false); // prevents repeated calls
+
+  const onScroll = event => {
+    const {
+      contentOffset: {y},
+    } = event.nativeEvent;
+
+    const triggerThreshold = 0.8 * screenHeight;
+
+    // Trigger only if not throttled and crossed threshold
+    if (y >= lastTriggeredOffset + triggerThreshold && !isThrottled) {
+      const nextTrigger = lastTriggeredOffset + triggerThreshold;
+      setLastTriggeredOffset(nextTrigger);
+
+      console.log('On scroll reached');
+
+      if (loadMore) {
+        console.log('API condition reached');
+
+        setIsThrottled(true); // block further triggers
+        setTimeout(() => {
+          setPageNo(prev => {
+            const nextPage = prev + 1;
+            callGetEpisodesData(selectedSeason.season_id, nextPage); // call API with delayed next page
+            return nextPage;
+          });
+          setIsThrottled(false); // allow next scroll trigger after 3 sec
+        }, 2000); // 3 seconds delay
+      }
+    }
+  };
+
   const callGetEpisodesData = useCallback(async (seasonId, page) => {
     console.log('Coming in the episodes api', seasonId);
 
@@ -119,7 +179,10 @@ const MovieTvShowsDetailsScreen = ({navigation, route}) => {
 
     try {
       if (!seasonId) return;
+      console.log('Try block reahced');
+
       const url = `/content/${route.params._id}/season/${seasonId}/episodes`;
+      console.log('Url created ------->', url);
 
       const response = await apiInstance.get(url, {
         params: {
@@ -127,13 +190,13 @@ const MovieTvShowsDetailsScreen = ({navigation, route}) => {
         },
       });
 
-      if (response.status === 200) {
-        console.log(
-          'episodes list response is',
-          response?.data?.data.season[0].episodes,
-        );
+      console.log('Response is ---------->', response);
 
-        const newEpisodes = response?.data?.data.season[0].episodes || [];
+      if (response?.status == 200) {
+        console.log('Coming in the success block');
+
+        const newEpisodes = response?.data?.data?.episodes || [];
+        console.log('New episodes length', newEpisodes.length);
 
         if (newEpisodes.length < 30) {
           setLoadMore(false);
@@ -144,6 +207,8 @@ const MovieTvShowsDetailsScreen = ({navigation, route}) => {
         console.log('page is ------>', page);
 
         if (page == 1) {
+          console.log('Page 1 condition');
+
           setEpisodesData(newEpisodes);
           setListKey(prev => prev + 1);
         } else {
@@ -279,6 +344,8 @@ const MovieTvShowsDetailsScreen = ({navigation, route}) => {
   };
   return (
     <ScrollView
+      onScroll={onScroll}
+      scrollEventThrottle={16}
       bounces={false}
       contentContainerStyle={{
         flexGrow: 1,
@@ -613,19 +680,22 @@ const MovieTvShowsDetailsScreen = ({navigation, route}) => {
                       data={episodesData}
                       renderItem={renderItemOfEpisodes}
                       keyExtractor={(item, index) => index.toString()}
-                      onEndReached={() => {
-                        if (loadMore) {
-                          setPageNo(pageNo + 1);
-                          callGetEpisodesData(
-                            selectedSeason.season_id,
-                            pageNo + 1,
-                          ); // load next page
-                        }
-                      }}
-                      onEndReachedThreshold={0.5} // trigger when 50% from bottom
+                      // onEndReached={() => {
+                      //   if (loadMore) {
+                      //     setPageNo(pageNo + 1);
+                      //     callGetEpisodesData(
+                      //       selectedSeason.season_id,
+                      //       pageNo + 1,
+                      //     ); // load next page
+                      //   }
+                      // }}
+                      // onEndReachedThreshold={0.5} // trigger when 50% from bottom
                       ListFooterComponent={
                         loadMore && loadMoreLoader ? (
-                          <View style={{paddingVertical: 20}}>
+                          <View
+                            style={{
+                              paddingVertical: 20,
+                            }}>
                             <ActivityIndicator size="large" color="#4BB7B7" />
                           </View>
                         ) : null
