@@ -1,0 +1,8 @@
+export const FEATUREDCONTENTENDPOINT = `/content/featuredContent`;
+export const GENRELISTENDPOINT = `/content/genreList`;
+export const CATEGORYCONTENTLIST = `/content/categorisedContentList`;
+export const CONTENTDETAILS = `/content/{id}/contentDetail`;
+export const CONTENTSEARCH = `/content/contentSearch`;
+export const VERIFYPIN = '/auth/matchPin';
+export const MYPROFILE = '/profile/myProfile';
+export const UPDATEPROFILE = '/profile/updateProfile';
