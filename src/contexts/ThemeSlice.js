@@ -24,6 +24,8 @@ const themeSlice = createSlice({
 });
 
 export const initializeTheme = () => async dispatch => {
+  console.log("Coming in the initialize theme block");
+  
   try {
     const savedTheme = await AsyncStorage.getItem(THEME_KEY);
     const mode = savedTheme || 'dark';

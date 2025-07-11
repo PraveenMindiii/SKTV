@@ -319,6 +319,54 @@ const MySpaceScreen = ({navigation}) => {
                 />
               </View>
             </TouchableOpacity>
+
+             <View
+              style={{
+                height: 0.5,
+                backgroundColor: Colors.blankView,
+                marginTop: 15,
+              }}
+            />
+
+             <TouchableOpacity
+              onPress={() => {
+                navigation.navigate('AppThemes')
+              }}
+              style={{
+                flexDirection: 'row',
+                justifyContent: 'space-between',
+                paddingTop: 15,
+              }}
+              activeOpacity={1}>
+              <View style={{flexDirection: 'row', gap: 15}}>
+                <Image
+                  style={{height: 20, width: 20, resizeMode: 'contain'}}
+                  source={
+                    currentTheme === 'light'
+                      ? require('../../assets/images/icon_light_language.png')
+                      : require('../../assets/images/ico_language.png')
+                  }
+                />
+                <Text
+                  style={{
+                    color: theme('heading'),
+                    fontFamily: 'Quicksand-Medium',
+                    fontSize: 14,
+                  }}>
+                  {t('THEMES')}
+                </Text>
+              </View>
+              <View>
+                <Image
+                  style={{height: 20, width: 10, resizeMode: 'contain'}}
+                  source={
+                    currentTheme === 'light'
+                      ? require('../../assets/images/icon_light_arrow.png')
+                      : require('../../assets/images/ico_arrow.png')
+                  }
+                />
+              </View>
+            </TouchableOpacity>
             <View
               style={{
                 height: 0.5,

@@ -325,7 +325,7 @@ const [seeMore, setSeeMore] = useState(t('SEE_MORE'));
             }
           />
 
-          <View style={{paddingTop: insets.top + 30, flex : 1}}>
+          <View style={{paddingTop: insets.top, flex : 1}}>
             <View style={styles.header}>
               <View style={{flex: 1, position: 'relative'}}>
                 <TouchableOpacity

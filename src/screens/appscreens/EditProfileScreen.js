@@ -219,11 +219,11 @@ const EditProfileScreen = ({navigation}) => {
       </Modal>
       <View
         style={{
-          paddingTop: insets.top + 30,
+          paddingTop: insets.top,
           flex: 1,
           paddingBottom: insets.bottom + 20,
         }}>
-        <View style={{justifyContent: 'space-between', flex: 1}}>
+        <View style={{justifyContent: 'space-between', flex: 1,}}>
           <View>
             <HeadersAppScreen
               TitleName={t('EDITPROFILE')}

@@ -6,6 +6,7 @@ import EditProfileScreen from '../screens/appscreens/EditProfileScreen';
 import SeeMoreDataScreen from '../screens/appscreens/SeeMoreDataScreen';
 import MovieTvShowsDetailsScreen from '../screens/appscreens/MovieTvShowsDetailsScreen';
 import SearchScreen from '../screens/appscreens/SearchScreen';
+import AppThemes from '../screens/appscreens/AppThemes';
 
 const AppNavigator = () => {
   const Stack = createNativeStackNavigator();
@@ -21,6 +22,7 @@ const AppNavigator = () => {
         component={MovieTvShowsDetailsScreen}
       />
       <Stack.Screen name="SearchScreen" component={SearchScreen} />
+       <Stack.Screen name="AppThemes" component={AppThemes} />
     </Stack.Navigator>
   );
 };

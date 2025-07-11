@@ -59,7 +59,7 @@
   "PLEAE_ENTER_CORRECT_PIN": "Please enter correct pin!",
   "NO_PIN_ACCESS": "No PIN Access",
   "SEE_MORE": "See more",
-  "PLEASE_ENTER_VALID_PIN" : "Please enter valid pin!",
+  "PLEASE_ENTER_VALID_PIN": "Please enter valid pin!",
   "CHANGEPROFILE": "Change Profile",
   "Save": "Save",
   "FULLNAME": "Full name",
@@ -70,5 +70,7 @@
   "OPEN_CAMERA": "Open Camera",
   "OPEN_GALLERY": "Open Gallery",
   "Cancel": "Cancel",
-  "LOGOUTALERT": "Are you sure you want to logout"
+  "LOGOUTALERT": "Are you sure you want to logout",
+  "THEMES": "Themes",
+  "APPLIED": "APPLIED"
 }

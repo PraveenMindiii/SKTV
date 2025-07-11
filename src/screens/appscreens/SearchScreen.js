@@ -143,7 +143,7 @@ useFocusEffect(
       style={{
         flex: 1,
         backgroundColor: theme('background'),
-        paddingTop: insets.top + 20,
+        paddingTop: insets.top,
       }}>
       <LoadingOverlay loading={loading} />
       <StatusBar

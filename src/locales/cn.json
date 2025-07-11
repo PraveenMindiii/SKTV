@@ -70,5 +70,7 @@
   "OPEN_CAMERA": "打开相机",
   "OPEN_GALLERY": "打开相册",
   "Cancel": "取消",
-  "LOGOUTALERT": "您确定要退出登录吗？" 
+  "LOGOUTALERT": "您确定要退出登录吗？",
+  "THEMES": "主题",
+  "APPLIED": "已应用"
 }
