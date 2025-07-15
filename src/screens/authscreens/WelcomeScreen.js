@@ -28,6 +28,7 @@ const WelcomeScreen = ({navigation}) => {
   const [isLangugeVisibleModel, setIsLangugeVisibleModel] = useState(false);
   const {t} = useTranslate();
   const background = theme('background');
+  const appTheme = useSelector(state => state.appthemes);
   const heading = theme('heading');
   const handleLoginAsaGuest = () => {
     dispatch(
@@ -103,7 +104,7 @@ const WelcomeScreen = ({navigation}) => {
           <View style={{paddingHorizontal: 15}}>
             <PrimarySuccessButton
               title={t('LOGIN')}
-              backgroundColor="#4BB7B7"
+              backgroundColor={appTheme?.themeColor}
               onPress={() => {
                 navigation.navigate('PinScreen');
               }}

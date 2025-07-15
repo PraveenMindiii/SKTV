@@ -53,6 +53,7 @@ const EditProfileScreen = ({navigation}) => {
   const [phoneNumberErrorText, setPhoneNumberErrorText] = useState('');
   const [loading, setLoading] = useState(false);
   const {user} = useSelector(state => state.auth);
+  const appTheme = useSelector(state => state.appthemes)
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -264,18 +265,18 @@ const EditProfileScreen = ({navigation}) => {
                   paddingHorizontal: 10,
                   borderRadius: 6,
                   borderWidth: 1,
-                  borderColor: Colors.app_primary_color,
+                  borderColor: appTheme?.themeColor,
                 }}>
                 <Text
                   style={{
                     fontFamily: 'Quicksand-SemiBold',
                     fontSize: 16,
-                    color: Colors.app_primary_color,
+                    color: appTheme?.themeColor,
                   }}>
                   {t('CHANGEPROFILE')}
                 </Text>
                 <Image
-                  style={{height: 20, width: 20}}
+                  style={{height: 20, width: 20, tintColor: appTheme?.themeColor}}
                   source={require('../../assets/images/tabler_camera.png')}
                 />
               </TouchableOpacity>
@@ -359,7 +360,7 @@ const EditProfileScreen = ({navigation}) => {
                 handleSuccessButton();
               }}
               title={t('SAVE')}
-              backgroundColor="#4BB7B7"
+              backgroundColor={appTheme?.themeColor}
             />
           </View>
         </View>

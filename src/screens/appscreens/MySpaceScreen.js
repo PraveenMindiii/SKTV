@@ -32,6 +32,7 @@ const MySpaceScreen = ({navigation}) => {
   const [loading, setLoading] = useState(false);
   const [userData, setUserData] = useState({});
   const [isToken, setIsToken] = useState(user?.token);
+  const appTheme = useSelector(state => state.appthemes)
 
   const handleLogout = () => {
     dispatch(logout());
@@ -223,7 +224,7 @@ const MySpaceScreen = ({navigation}) => {
             <View>
               <Text
                 style={{
-                  color: theme('app_secondary_color'),
+                  color: appTheme?.themeColor,
                   fontFamily: 'Quicksand-Medium',
                   fontSize: 16,
                 }}>
@@ -403,7 +404,7 @@ const MySpaceScreen = ({navigation}) => {
               </View>
               <View>
                 <Image
-                  style={{height: 30, width: 30, resizeMode: 'contain'}}
+                  style={{height: 30, width: 30, resizeMode: 'contain', tintColor: appTheme?.tintColor}}
                   source={
                     currentTheme === 'light'
                       ? require('../../assets/images/icon_famicons_toggle.png')
@@ -491,7 +492,7 @@ const MySpaceScreen = ({navigation}) => {
               activeOpacity={1}>
               <Text
                 style={{
-                  color: theme('app_secondary_color'),
+                  color: appTheme?.themeColor,
                   fontFamily: 'Quicksand-Medium',
                   fontSize: 16,
                 }}>

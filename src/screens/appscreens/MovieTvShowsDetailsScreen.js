@@ -59,8 +59,7 @@ const MovieTvShowsDetailsScreen = ({navigation, route}) => {
   const [loadMoreLoader, setLoadMoreLoader] = useState(false);
   const [loadMore, setLoadMore] = useState(true);
   const [listKey, setListKey] = useState(0);
-  const [hasCalledEnd, setHasCalledEnd] = useState(false);
-
+ const appTheme = useSelector(state => state.appthemes);
   const [lastTriggeredOffset, setLastTriggeredOffset] = useState(0);
   const screenHeight = Dimensions.get('window').height;
 
@@ -536,7 +535,7 @@ const MovieTvShowsDetailsScreen = ({navigation, route}) => {
                     });
                   }, 200);
                 }}>
-                <View style={styles.button}>
+                <View style={[styles.button, {backgroundColor: appTheme?.themeColor}]}>
                   <Image
                     source={require('../../assets/images/ico_play.png')}
                     style={{height: 24, width: 24}}
@@ -720,7 +719,6 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     borderRadius: 10,
-    backgroundColor: Colors.app_primary_color,
   },
   text: {
     padding: 12,

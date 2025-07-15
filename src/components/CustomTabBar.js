@@ -8,8 +8,8 @@ import {
   Platform,
 } from 'react-native';
 import Colors from '../constants/Colors';
-import { getSafeAreaMode } from '../contexts/SafeAreaSlice';
-import { useSelector } from 'react-redux';
+import {getSafeAreaMode} from '../contexts/SafeAreaSlice';
+import {useSelector} from 'react-redux';
 
 const CustomTabBar = ({
   state,
@@ -18,6 +18,7 @@ const CustomTabBar = ({
   theme,
   currentTheme,
 }) => {
+  const appTheme = useSelector(state => state.appthemes);
   const icons = {
     Home:
       currentTheme == 'dark'
@@ -87,14 +88,18 @@ const CustomTabBar = ({
             }}>
             <TouchableNativeFeedback
               background={TouchableNativeFeedback.Ripple(
-                Colors.app_primary_color,
+                appTheme?.themeColor,
                 false,
               )}
               key={route.key}
               accessibilityRole="button"
               accessibilityState={isFocused ? {selected: true} : {}}
               onPress={onPress}>
-              <View style={[styles.tab, isFocused && styles.focusedTab]}>
+              <View
+                style={[
+                  styles.tab,
+                  isFocused && {backgroundColor: appTheme?.themeColor, borderRadius: 40},
+                ]}>
                 <Image
                   source={
                     isFocused ? iconsSelected[route.name] : icons[route.name]
@@ -139,10 +144,7 @@ const styles = StyleSheet.create({
     gap: 5,
     padding: 7,
   },
-  focusedTab: {
-    backgroundColor: '#42A3A3',
-    borderRadius: 40,
-  },
+
   icon: {
     width: 16,
     height: 16,

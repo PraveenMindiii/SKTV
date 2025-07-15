@@ -8,6 +8,7 @@ const ManualOtpInput = ({sendOtp}) => {
   const inputs = useRef([]);
   const [showPin, setShowPin] = useState(true)
   const currentTheme = useSelector(getThemeMode);
+  const appTheme = useSelector(state => state.appthemes)
 
   const handleChange = (text, index) => {
     const newOtp = [...otp];
@@ -70,7 +71,7 @@ const ManualOtpInput = ({sendOtp}) => {
       activeOpacity={1}
         style={{
           height: '100%',
-          backgroundColor: '#42A3A3',
+          backgroundColor: appTheme?.themeColor,
           borderWidth: 0.3,
           borderColor: '#394848',
           justifyContent:"center",

@@ -13,6 +13,8 @@ import {
   useSafeAreaInsets,
 } from 'react-native-safe-area-context';
 import {setSafeAreaInsets} from './src/contexts/SafeAreaSlice';
+import {updateAppTheme} from './src/contexts/AppThemesSlice';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const App = () => {
   LogBox.ignoreAllLogs(true);
@@ -24,7 +26,26 @@ const App = () => {
   useEffect(() => {
     SplashScreen.hide();
     //dispatch(setSafeAreaInsets(insets));
+    const loadTheme = async () => {
+      try {
+        console.log("Theme try block reached");
+        
+        const savedTheme = await AsyncStorage.getItem('app_theme');
+        console.log("Saved theme is ---->", savedTheme);
+        
+        if (savedTheme !== null) {
+          const parsedTheme = JSON.parse(savedTheme);
+          dispatch(updateAppTheme(parsedTheme));
+          console.log('Theme loaded from AsyncStorage:', parsedTheme);
+        }
+      } catch (error) {
+        console.error('Failed to load theme:', error);
+      }
+    };
+
+    loadTheme();
   }, []);
+
 
   const {isLoggedIn} = useSelector(state => state.auth);
 

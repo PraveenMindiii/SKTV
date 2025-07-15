@@ -3,6 +3,7 @@ import authReducer, {initializeAuth} from '../contexts/AuthSlice';
 import languageReducer, {initializeLang} from '../contexts/LanguageSlice';
 import themeReducer, {initializeTheme} from '../contexts/ThemeSlice';
 import safeAreaReducer from '../contexts/SafeAreaSlice';
+import appThemeReducer from '../contexts/AppThemesSlice';
 
 const store = configureStore({
   reducer: {
@@ -10,6 +11,7 @@ const store = configureStore({
     language: languageReducer,
     theme: themeReducer,
     safeArea: safeAreaReducer,
+    appthemes: appThemeReducer,
   },
 });
 

@@ -1,8 +1,16 @@
 import {View, Text, TouchableNativeFeedback, StyleSheet} from 'react-native';
 import React from 'react';
 import Colors from '../constants/Colors';
+import {useSelector} from 'react-redux';
 
-const CommonTabButton = ({label, onPressHandler, isActive ,themeText , themeBackground}) => {
+const CommonTabButton = ({
+  label,
+  onPressHandler,
+  isActive,
+  themeText,
+  themeBackground,
+}) => {
+  const appTheme = useSelector(state => state.appthemes);
   return (
     <View
       style={{
@@ -13,7 +21,7 @@ const CommonTabButton = ({label, onPressHandler, isActive ,themeText , themeBack
       }}>
       <TouchableNativeFeedback
         background={TouchableNativeFeedback.Ripple(
-          Colors.app_primary_color,
+          appTheme?.themeColor,
           false,
         )}
         onPress={() => {
@@ -22,9 +30,12 @@ const CommonTabButton = ({label, onPressHandler, isActive ,themeText , themeBack
         <View
           style={{
             ...styles.tab,
-            backgroundColor: isActive ? '#42A3A3' : themeBackground,
+            backgroundColor: isActive ? appTheme?.themeColor : themeBackground,
           }}>
-          <Text style={{...styles.tabText ,color : isActive ? 'white' :themeText}}>{label}</Text>
+          <Text
+            style={{...styles.tabText, color: isActive ? 'white' : themeText}}>
+            {label}
+          </Text>
         </View>
       </TouchableNativeFeedback>
     </View>

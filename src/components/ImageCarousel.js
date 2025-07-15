@@ -13,7 +13,7 @@ import {ConstValues} from '../constants/ConstValues';
 import Colors from '../constants/Colors';
 import ImageWithLoading from './ImageWithLoading';
 
-const ImageCarousel = ({data, handleOnPressBanner}) => {
+const ImageCarousel = ({data, handleOnPressBanner, appThemeColor}) => {
   const [currentIndex, setCurrentIndex] = useState(0);
   const fadeAnim = useRef(new Animated.Value(1)).current;
 
@@ -62,7 +62,7 @@ const ImageCarousel = ({data, handleOnPressBanner}) => {
         style={{
           bottom: ConstValues.screenHorizontalPadding,
           right: ConstValues.screenHorizontalPadding + 16,
-          backgroundColor: Colors.app_primary_color,
+          backgroundColor: appThemeColor,
           position: 'absolute',
           zIndex: 99,
           borderRadius: 50,

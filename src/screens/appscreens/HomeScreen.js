@@ -31,7 +31,7 @@ import useTranslate from '../../hooks/useTranslate';
 import {useSelector} from 'react-redux';
 import {getThemeMode} from '../../contexts/ThemeSlice';
 import useTheme from '../../hooks/useTheme';
-import { getSafeAreaMode } from '../../contexts/SafeAreaSlice';
+import {getSafeAreaMode} from '../../contexts/SafeAreaSlice';
 
 const HomeScreen = ({navigation}) => {
   const {t} = useTranslate();
@@ -46,10 +46,13 @@ const HomeScreen = ({navigation}) => {
   const [categoryContentList, setCategoryContentList] = useState([]);
   const [selectedGenre, setSelectedGenre] = useState('');
   const [loading, setLoading] = useState(true);
-const [seeMore, setSeeMore] = useState(t('SEE_MORE'));
-  
+  const appTheme = useSelector(state => state.appthemes);
+
+  const [seeMore, setSeeMore] = useState(t('SEE_MORE'));
 
   useEffect(() => {
+    console.log('Theme color is ', appTheme?.themeColor);
+
     callGetFeaturedContent();
   }, []);
   useEffect(() => {
@@ -180,12 +183,19 @@ const [seeMore, setSeeMore] = useState(t('SEE_MORE'));
         }}>
         <TouchableNativeFeedback
           background={TouchableNativeFeedback.Ripple(
-            Colors.app_primary_color,
+            appTheme?.themeColor,
             false,
           )}
           onPress={() => onPress(item, index)}>
           <View>
-            <Text style={[styles.text, item.isSelected && styles.activeText]}>
+            <Text
+              style={[
+                styles.text,
+                item.isSelected && {
+                  fontFamily: 'Quicksand-SemiBold',
+                  color: appTheme?.themeColor,
+                },
+              ]}>
               {item.name || 'All'}
             </Text>
           </View>
@@ -286,7 +296,7 @@ const [seeMore, setSeeMore] = useState(t('SEE_MORE'));
 
   const HorizontalItem = React.memo(({item, onPress}) => (
     <Pressable
-      onPress={() => {        
+      onPress={() => {
         onPress(item._id);
       }}
       style={{
@@ -325,7 +335,7 @@ const [seeMore, setSeeMore] = useState(t('SEE_MORE'));
             }
           />
 
-          <View style={{paddingTop: insets.top, flex : 1}}>
+          <View style={{paddingTop: insets.top, flex: 1}}>
             <View style={styles.header}>
               <View style={{flex: 1, position: 'relative'}}>
                 <TouchableOpacity
@@ -343,14 +353,17 @@ const [seeMore, setSeeMore] = useState(t('SEE_MORE'));
                 <CustomSearchBar />
               </View>
               <View>
-                <FastImage
-                  style={styles.notificationIcon}
+                {/* <FastImage
+                 
+                /> */}
+                <Image
+                  style={[styles.notificationIcon, {tintColor: appTheme?.themeColor}]}
                   source={
                     currentTheme == 'dark'
-                      ? require('../../assets/images/ico_notification.png')
-                      : require('../../assets/images/icon_Notifi_light.png')
+                      ? require('../../assets/images/ico_notificationBell.png')
+                      : require('../../assets/images/ico_notificationBell.png')
                   }
-                  resizeMode={FastImage.resizeMode.contain}
+                  resizeMode={"contain"}
                 />
               </View>
             </View>
@@ -359,6 +372,7 @@ const [seeMore, setSeeMore] = useState(t('SEE_MORE'));
                 <ImageCarousel
                   data={arrFeaturedContent}
                   handleOnPressBanner={handleNavigation}
+                  appThemeColor={appTheme?.themeColor}
                 />
               </View>
             ) : (
@@ -368,6 +382,7 @@ const [seeMore, setSeeMore] = useState(t('SEE_MORE'));
             <View
               style={{
                 ...styles.tabContainer,
+                borderColor: appTheme?.themeColor,
                 width: ConstValues.deviceWidth * 0.6,
               }}>
               <CommonTabButton
@@ -392,7 +407,14 @@ const [seeMore, setSeeMore] = useState(t('SEE_MORE'));
             </View>
 
             <View style={styles.genreContainer}>
-              {arrCategoryOfShow && <View style={styles.verticalBar} />}
+              {arrCategoryOfShow && (
+                <View
+                  style={[
+                    styles.verticalBar,
+                    {backgroundColor: appTheme?.themeColor},
+                  ]}
+                />
+              )}
               <FlatList
                 data={arrCategoryOfShow}
                 renderItem={renderItemOfCategoryOfShows}
@@ -418,7 +440,7 @@ const [seeMore, setSeeMore] = useState(t('SEE_MORE'));
                 style={{
                   flex: 1,
                   alignItems: 'center',
-                  justifyContent: "center",
+                  justifyContent: 'center',
                 }}>
                 <Text
                   style={{
@@ -458,15 +480,10 @@ const styles = StyleSheet.create({
     paddingHorizontal: 5,
     marginTop: Platform.OS == 'android' ? -3 : 0,
   },
-  activeText: {
-    color: '#42A3A3',
-    fontFamily: 'Quicksand-SemiBold',
-  },
 
   verticalBar: {
     width: 2,
     height: 25,
-    backgroundColor: '#42A3A3',
     marginRight: 6,
   },
 
@@ -494,7 +511,6 @@ const styles = StyleSheet.create({
     backgroundColor: 'black',
   },
   tabContainer: {
-    borderColor: '#42A3A3',
     borderWidth: 1,
     justifyContent: 'space-between',
     padding: 2,

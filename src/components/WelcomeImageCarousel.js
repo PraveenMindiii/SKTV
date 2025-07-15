@@ -19,7 +19,7 @@ const data = [
 
 const WelcomeImageCarousel = () => {
   const [currentIndex, setCurrentIndex] = useState(0);
-
+  const appTheme = useSelector(state => state.appthemes);
   return (
     <View>
       <Carousel
@@ -53,7 +53,7 @@ const WelcomeImageCarousel = () => {
               height: 5,
               borderRadius: 10,
               backgroundColor:
-                currentIndex === index ? Colors.app_primary_color : '#ffffff',
+                currentIndex === index ? appTheme?.themeColor : '#ffffff',
               marginHorizontal: 4,
               borderWidth: 1,
             }}

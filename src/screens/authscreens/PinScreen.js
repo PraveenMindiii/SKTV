@@ -32,6 +32,7 @@ const screenHeight = Dimensions.get('window').height;
 const screenWidth = Dimensions.get('window').width;
 const PinScreen = ({navigation}) => {
   const dispatch = useDispatch();
+  const appTheme = useSelector(state => state.appthemes);
   const {t} = useTranslate();
   const [otp, setOtp] = useState('');
   const [loading, setLoading] = useState(false);
@@ -51,7 +52,7 @@ const PinScreen = ({navigation}) => {
 
   const handleOtpFilled = value => {
     if (!otp || otp.trim() === '') {
-      Alert.alert("Alert" ,pinEmptyAlert);
+      Alert.alert('Alert', pinEmptyAlert);
     } else if (otp?.length < 6) {
       alert(pinInvalidAlert);
     } else {
@@ -132,7 +133,7 @@ const PinScreen = ({navigation}) => {
             <View style={{width: '90%', marginTop: 30, alignSelf: 'center'}}>
               <PrimarySuccessButton
                 title={t('OK')}
-                backgroundColor="#4BB7B7"
+                backgroundColor={appTheme?.themeColor}
                 onPress={() => {
                   setIsResetModalVisible(false);
                 }}
@@ -253,11 +254,14 @@ const PinScreen = ({navigation}) => {
               </Text>
             </TouchableOpacity>
             <View style={{height: 90}} />
-            <PrimarySuccessButton
-              title={t('LOGIN')}
-              backgroundColor="#4BB7B7"
-              onPress={handleOtpFilled}
-            />
+            <View style={{backgroundColor: "white", padding: 0.5, borderRadius: 10}}>
+              <PrimarySuccessButton
+                title={t('LOGIN')}
+                backgroundColor={appTheme?.themeColor}
+                onPress={handleOtpFilled}
+              />
+            </View>
+
             {/* <TouchableOpacity
             style={style.loginButton}
             activeOpacity={1}

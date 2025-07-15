@@ -1,8 +1,10 @@
 import React, { useEffect, useRef } from 'react';
 import { Animated, View, ActivityIndicator, StatusBar } from 'react-native';
 import Colors from '../constants/Colors';
+import { useSelector } from 'react-redux';
 
 const LoadingOverlay = ({ loading }) => {
+  const appTheme = useSelector(state => state.appthemes);
   const fadeAnim = useRef(new Animated.Value(0)).current;
 
   useEffect(() => {
@@ -40,7 +42,7 @@ const LoadingOverlay = ({ loading }) => {
             opacity: fadeAnim,
           }}
         >
-          <ActivityIndicator size="large" color={Colors.app_primary_color} />
+          <ActivityIndicator size="large" color={appTheme?.themeColor} />
         </Animated.View>
       )}
     </>
