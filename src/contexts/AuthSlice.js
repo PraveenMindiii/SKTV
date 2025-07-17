@@ -7,7 +7,7 @@ const initialState = {
 };
 
 // Define an async function to initialize the state from AsyncStorage
-const initializeAuthState = async ()=> {
+const initializeAuthState = async ()=> {  
   try {
     const userData = await AsyncStorage.getItem("user");
     if (userData) {

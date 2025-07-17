@@ -170,7 +170,7 @@ const HomeScreen = ({navigation}) => {
     ({item, index}) => (
       <GenreItem item={item} index={index} onPress={handleGenrePress} />
     ),
-    [handleGenrePress],
+    [handleGenrePress, appTheme],
   );
 
   const GenreItem = React.memo(({item, index, onPress}) => {
@@ -360,8 +360,8 @@ const HomeScreen = ({navigation}) => {
                   style={[styles.notificationIcon, {tintColor: appTheme?.themeColor}]}
                   source={
                     currentTheme == 'dark'
-                      ? require('../../assets/images/ico_notificationBell.png')
-                      : require('../../assets/images/ico_notificationBell.png')
+                      ? require('../../assets/images/ico_notification_bell1.png')
+                      : require('../../assets/images/ico_notification_bell1.png')
                   }
                   resizeMode={"contain"}
                 />
@@ -444,7 +444,7 @@ const HomeScreen = ({navigation}) => {
                 }}>
                 <Text
                   style={{
-                    color: 'white',
+                    color: currentTheme == 'light' ? 'black' : 'white',
                     fontFamily: 'Quicksand-Regular',
                     fontSize: 18,
                   }}>

@@ -27,6 +27,8 @@ import PrimarySuccessButton from '../../components/PrimarySuccessButton';
 import Colors, {themes} from '../../constants/Colors';
 import useTheme from '../../hooks/useTheme';
 import {getThemeMode} from '../../contexts/ThemeSlice';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import {updateAppTheme} from '../../contexts/AppThemesSlice';
 
 const screenHeight = Dimensions.get('window').height;
 const screenWidth = Dimensions.get('window').width;
@@ -71,6 +73,30 @@ const PinScreen = ({navigation}) => {
         // success logic here
         let data = response?.data?.data;
         dispatch(login(data));
+        const parts = data?.themes?.title.split('-');
+        await AsyncStorage.setItem(
+          'app_theme',
+          JSON.stringify({
+            themeName: parts[0],
+            themeSubName: parts[1],
+            themeColor: data?.themes?.colourCode,
+            themeGradientColorOne: data?.themes?.colourCode,
+            themeGadientColorSecond: data?.themes?.gradientCode
+              ? data?.themes?.gradientCode
+              : data?.themes?.colourCode,
+          }),
+        );
+        dispatch(
+          updateAppTheme({
+            themeName: parts[0],
+            themeSubName: parts[1],
+            themeColor: data?.themes?.colourCode,
+            themeGradientColorOne: data?.themes?.colourCode,
+            themeGadientColorSecond: data?.themes?.gradientCode
+              ? data?.themes?.gradientCode
+              : data?.themes?.colourCode,
+          }),
+        );
       }
     } catch (error) {
       console.error('Error Logging in', error);
@@ -254,7 +280,12 @@ const PinScreen = ({navigation}) => {
               </Text>
             </TouchableOpacity>
             <View style={{height: 90}} />
-            <View style={{backgroundColor: "white", padding: 0.5, borderRadius: 10}}>
+            <View
+              style={{
+                backgroundColor: 'white',
+                padding: 0.5,
+                borderRadius: 10,
+              }}>
               <PrimarySuccessButton
                 title={t('LOGIN')}
                 backgroundColor={appTheme?.themeColor}

@@ -20,6 +20,7 @@ import {MYPROFILE} from '../../services/ApiEndPoints';
 import apiInstance, {get} from '../../services/ApiInstance';
 import {useFocusEffect} from '@react-navigation/native';
 import {getSafeAreaMode} from '../../contexts/SafeAreaSlice';
+import {updateAppTheme} from '../../contexts/AppThemesSlice';
 
 const MySpaceScreen = ({navigation}) => {
   const {theme} = useTheme();
@@ -32,10 +33,20 @@ const MySpaceScreen = ({navigation}) => {
   const [loading, setLoading] = useState(false);
   const [userData, setUserData] = useState({});
   const [isToken, setIsToken] = useState(user?.token);
-  const appTheme = useSelector(state => state.appthemes)
+  const appTheme = useSelector(state => state.appthemes);
 
   const handleLogout = () => {
     dispatch(logout());
+    dispatch(
+      updateAppTheme({
+        themeName: 'Default Theme',
+        themeSubName: 'Tesla',
+        themeColor: '#42A3A3',
+        // themeBackgroundColor:string,
+        themeGradientColorOne: 'rgba(73, 218, 218, 1)',
+        themeGadientColorSecond: 'rgba(66, 163, 163, 1)',
+      }),
+    );
   };
 
   useFocusEffect(
@@ -321,53 +332,6 @@ const MySpaceScreen = ({navigation}) => {
               </View>
             </TouchableOpacity>
 
-             <View
-              style={{
-                height: 0.5,
-                backgroundColor: Colors.blankView,
-                marginTop: 15,
-              }}
-            />
-
-             <TouchableOpacity
-              onPress={() => {
-                navigation.navigate('AppThemes')
-              }}
-              style={{
-                flexDirection: 'row',
-                justifyContent: 'space-between',
-                paddingTop: 15,
-              }}
-              activeOpacity={1}>
-              <View style={{flexDirection: 'row', gap: 15}}>
-                <Image
-                  style={{height: 20, width: 20, resizeMode: 'contain'}}
-                  source={
-                    currentTheme === 'light'
-                      ? require('../../assets/images/icon_light_language.png')
-                      : require('../../assets/images/ico_language.png')
-                  }
-                />
-                <Text
-                  style={{
-                    color: theme('heading'),
-                    fontFamily: 'Quicksand-Medium',
-                    fontSize: 14,
-                  }}>
-                  {t('THEMES')}
-                </Text>
-              </View>
-              <View>
-                <Image
-                  style={{height: 20, width: 10, resizeMode: 'contain'}}
-                  source={
-                    currentTheme === 'light'
-                      ? require('../../assets/images/icon_light_arrow.png')
-                      : require('../../assets/images/ico_arrow.png')
-                  }
-                />
-              </View>
-            </TouchableOpacity>
             <View
               style={{
                 height: 0.5,
@@ -376,6 +340,56 @@ const MySpaceScreen = ({navigation}) => {
               }}
             />
 
+            {user?.token && (
+              <TouchableOpacity
+                onPress={() => {
+                  navigation.navigate('AppThemes');
+                }}
+                style={{
+                  flexDirection: 'row',
+                  justifyContent: 'space-between',
+                  paddingTop: 15,
+                }}
+                activeOpacity={1}>
+                <View style={{flexDirection: 'row', gap: 15}}>
+                  <Image
+                    style={{height: 20, width: 20, resizeMode: 'contain'}}
+                    source={
+                      currentTheme === 'light'
+                        ? require('../../assets/images/icon_light_language.png')
+                        : require('../../assets/images/ico_language.png')
+                    }
+                  />
+                  <Text
+                    style={{
+                      color: theme('heading'),
+                      fontFamily: 'Quicksand-Medium',
+                      fontSize: 14,
+                    }}>
+                    {t('THEMES')}
+                  </Text>
+                </View>
+                <View>
+                  <Image
+                    style={{height: 20, width: 10, resizeMode: 'contain'}}
+                    source={
+                      currentTheme === 'light'
+                        ? require('../../assets/images/icon_light_arrow.png')
+                        : require('../../assets/images/ico_arrow.png')
+                    }
+                  />
+                </View>
+              </TouchableOpacity>
+            )}
+            {user?.token && (
+              <View
+                style={{
+                  height: 0.5,
+                  backgroundColor: Colors.blankView,
+                  marginTop: 15,
+                }}
+              />
+            )}
             <TouchableOpacity
               onPress={toggleTheme}
               style={{
@@ -404,7 +418,12 @@ const MySpaceScreen = ({navigation}) => {
               </View>
               <View>
                 <Image
-                  style={{height: 30, width: 30, resizeMode: 'contain', tintColor: appTheme?.tintColor}}
+                  style={{
+                    height: 30,
+                    width: 30,
+                    resizeMode: 'contain',
+                    tintColor: appTheme?.tintColor,
+                  }}
                   source={
                     currentTheme === 'light'
                       ? require('../../assets/images/icon_famicons_toggle.png')
@@ -472,7 +491,7 @@ const MySpaceScreen = ({navigation}) => {
               onPress={() => {
                 Alert.alert(
                   '',
-                 'Are you sure you want to logout?',
+                  'Are you sure you want to logout?',
                   [
                     {
                       text: 'Cancel',

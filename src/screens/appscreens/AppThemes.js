@@ -23,70 +23,40 @@ import {useDispatch, useSelector} from 'react-redux';
 import {GETTHEMESLIST} from '../../services/ApiEndPoints';
 import {useFocusEffect} from '@react-navigation/native';
 import LoadingOverlay from '../../components/LoadingOverlay';
-import apiInstance, {get} from '../../services/ApiInstance';
+import apiInstance, {get, put} from '../../services/ApiInstance';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const screenHeight = Dimensions.get('window').height;
 const screenWidth = Dimensions.get('window').width;
 
 // Theme list
-// const themeList = [
-//   {
-//     id: 0,
-//     themeColor: 'Default Theme',
-//     themeVarient: 'Tesla',
-//     appliedTheme: true,
-//     images: [
-//       require('../../assets/images/themes/img_theme_tesla0.png'),
-//       require('../../assets/images/themes/img_theme_tesla1.png'),
-//       require('../../assets/images/themes/img_theme_tesla2.png'),
-//     ],
-//   },
-//   {
-//     id: 1,
-//     themeColor: 'Purple Theme',
-//     themeVarient: 'Vogue',
-//     appliedTheme: false,
-//     images: [
-//       require('../../assets/images/themes/img_theme_vogue0.png'),
-//       require('../../assets/images/themes/img_theme_vogue1.png'),
-//       require('../../assets/images/themes/img_theme_vogue2.png'),
-//     ],
-//   },
-//   {
-//     id: 2,
-//     themeColor: 'Black',
-//     themeVarient: 'Power',
-//     appliedTheme: false,
-//     images: [
-//       require('../../assets/images/themes/img_theme_power0.png'),
-//       require('../../assets/images/themes/img_theme_power1.png'),
-//       require('../../assets/images/themes/img_theme_power2.png'),
-//     ],
-//   },
-//   {
-//     id: 3,
-//     themeColor: 'Military',
-//     themeVarient: 'Defender',
-//     appliedTheme: false,
-//     images: [
-//       require('../../assets/images/themes/img_theme_defender0.png'),
-//       require('../../assets/images/themes/img_theme_defender1.png'),
-//       require('../../assets/images/themes/img_theme_defender2.png'),
-//     ],
-//   },
-//   {
-//     id: 4,
-//     themeColor: 'Latin America',
-//     themeVarient: 'Festival',
-//     appliedTheme: false,
-//     images: [
-//       require('../../assets/images/themes/img_theme_festival0.png'),
-//       require('../../assets/images/themes/img_theme_festival1.png'),
-//       require('../../assets/images/themes/img_theme_festival2.png'),
-//     ],
-//   },
-// ];
+const arrThemeImages = {
+  teslaImages: [
+    require('../../assets/images/themes/img_theme_tesla0.png'),
+    require('../../assets/images/themes/img_theme_tesla1.png'),
+    require('../../assets/images/themes/img_theme_tesla2.png'),
+  ],
+  vogueImages: [
+    require('../../assets/images/themes/img_theme_vogue0.png'),
+    require('../../assets/images/themes/img_theme_vogue1.png'),
+    require('../../assets/images/themes/img_theme_vogue2.png'),
+  ],
+  powerImages: [
+    require('../../assets/images/themes/img_theme_power0.png'),
+    require('../../assets/images/themes/img_theme_power1.png'),
+    require('../../assets/images/themes/img_theme_power2.png'),
+  ],
+  defenderImages: [
+    require('../../assets/images/themes/img_theme_defender0.png'),
+    require('../../assets/images/themes/img_theme_defender1.png'),
+    require('../../assets/images/themes/img_theme_defender2.png'),
+  ],
+  festivalImages: [
+    require('../../assets/images/themes/img_theme_festival0.png'),
+    require('../../assets/images/themes/img_theme_festival1.png'),
+    require('../../assets/images/themes/img_theme_festival2.png'),
+  ],
+};
 
 const AppThemes = ({navigation}) => {
   const {t} = useTranslate();
@@ -98,27 +68,43 @@ const AppThemes = ({navigation}) => {
   const [showImage, setShowImage] = useState(false);
   const dispatch = useDispatch();
   const {user} = useSelector(state => state.auth);
+  const appTheme = useSelector(state => state.appthemes);
   const [loading, setLoading] = useState(false);
-  const [themeList, setThemeList] = useState([{}]);
+  const [themeList, setThemeList] = useState([]);
 
   useEffect(() => {
     if (user?.token) {
-      console.log('Token is ---->', user?.token);
-
       callGetThemesList();
     }
   }, [user?.token]);
 
+  // useEffect(() => {
+  //   for (let theme in themeList) {
+  //     if (theme?.themeId == appTheme?.themeId) {
+  //       setAppliedTheme(theme.id);
+  //     } else {
+  //       setAppliedTheme(0);
+  //     }
+  //   }
+  // }, [themeList]);
+
   const handleShowImage = img => {
+    setSelectedIndex(-1)
     setIsModalVisible(true);
     setShowImage(img);
+  };
+
+  const obj = {
+    '#49DADA': arrThemeImages.teslaImages,
+    '#7F029A': arrThemeImages.vogueImages,
+    '#000000': arrThemeImages.powerImages,
+    '#2C5F34': arrThemeImages.defenderImages,
+    '#E9C945': arrThemeImages.festivalImages,
   };
 
   const callGetThemesList = useCallback(async () => {
     if (!user?.token) return;
     setLoading(true);
-    console.log('Coming in the themes api');
-    console.log('User token is ----->', user?.token);
 
     try {
       const response = await get({
@@ -126,8 +112,6 @@ const AppThemes = ({navigation}) => {
         params: '',
         token: user?.token,
       });
-
-      console.log('response get themes list', response);
 
       if (response?.code === 200) {
         let data = response?.data;
@@ -139,16 +123,32 @@ const AppThemes = ({navigation}) => {
             themeTitle: parts[0],
             themeVarient: parts[1],
             themeColor: item.colourCode,
-            appliedTheme: false,
-            images: [
-              require('../../assets/images/themes/img_theme_tesla0.png'),
-              require('../../assets/images/themes/img_theme_tesla1.png'),
-              require('../../assets/images/themes/img_theme_tesla2.png'),
-            ],
+            images: obj[item?.colourCode] ? obj[item?.colourCode] : '',
+            // item.colourCode == '#49DADA'
+            //   // ? arrThemeImages.teslaImages
+            //   // : item.colourCode == '#7F029A'
+            //   // ? arrThemeImages.vogueImages
+            //   // : item.colourCode == '#000000'
+            //   // ? arrThemeImages.powerImages
+            //   // : item.colourCode == '#2C5F34'
+            //   // ? arrThemeImages.defenderImages
+            //   // : item.colourCode == '#E9C945'
+            //   // ? arrThemeImages.festivalImages
+            //   : '',
             themeGradientColor: item?.gradientCode ? item?.gradientCode : '',
           };
         });
-        setThemeList(updatedArr);
+
+        const tempArr = updatedArr.filter(item => item.images != '');
+        setThemeList(tempArr);
+        for (let i in tempArr) {
+          if (tempArr[i]?.themeColor == `${appTheme?.themeColor}`) {
+            setAppliedTheme(tempArr[i]?.id);
+            break;
+          } else {
+            setAppliedTheme(0);
+          }
+        }
       }
     } catch (error) {
       console.error('Error Logging in', error);
@@ -159,18 +159,17 @@ const AppThemes = ({navigation}) => {
 
   const callUpdateUserTheme = useCallback(async themeId => {
     setLoading(true);
-    console.log('Theme id is ----->', themeId);
 
     try {
-      const url = `/themes/${themeId}`;
+      const url = `/themes/changeUserTheme/${themeId}`;
 
-      const response = await get({
+      const response = await put(
+        {
         url: url,
         params: {id: themeId},
         token: user?.token,
       });
 
-      console.log('Response of the update theme api is', response);
 
       if (response.status === 200) {
       }
@@ -211,18 +210,42 @@ const AppThemes = ({navigation}) => {
                 style={styles.applyButton}
                 onPress={async () => {
                   setAppliedTheme(selectedIndex);
-                  dispatch(updateAppTheme(themeList[selectedIndex]));
-                  setSelectedIndex(-1);
+                  // dispatch(updateAppTheme(themeList[selectedIndex]));
+                  dispatch(
+                    updateAppTheme({
+                      themeName: themeList[selectedIndex].themeTitle,
+                      themeSubName: themeList[selectedIndex].themeVarient,
+                      themeColor: themeList[selectedIndex].themeColor,
+                      themeGradientColorOne:
+                        themeList[selectedIndex].themeColor,
+                      themeGadientColorSecond: themeList[selectedIndex]
+                        .gradientCode
+                        ? themeList[selectedIndex].themeColor
+                        : themeList[selectedIndex].themeColor,
+                    }),
+                  );
+
                   callUpdateUserTheme(themeList[selectedIndex].themeId);
                   try {
                     await AsyncStorage.setItem(
                       'app_theme',
-                      JSON.stringify(themeList[selectedIndex]),
+                      JSON.stringify({
+                        themeName: themeList[selectedIndex].themeTitle,
+                        themeSubName: themeList[selectedIndex].themeVarient,
+                        themeColor: themeList[selectedIndex].themeColor,
+                        themeGradientColorOne:
+                          themeList[selectedIndex].themeColor,
+                        themeGadientColorSecond: themeList[selectedIndex]
+                          .gradientCode
+                          ? themeList[selectedIndex].themeColor
+                          : themeList[selectedIndex].themeColor,
+                      }),
                     );
                     console.log('Theme saved to AsyncStorage');
                   } catch (error) {
                     console.error('Failed to save theme:', error);
                   }
+                  setSelectedIndex(-1);
                 }}>
                 <Text
                   style={{
@@ -410,7 +433,6 @@ const CommonView = ({
         {images?.map((img, index) => (
           <TouchableOpacity
             onPress={() => {
-              console.log('the current image is ---->>>>>>', index);
               showImage(images[index]);
             }}
             style={{

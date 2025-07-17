@@ -3,7 +3,9 @@ import {Platform} from 'react-native';
 import Config from 'react-native-config';
 import DeviceInfo from 'react-native-device-info';
 
-const API_BASE_URL = 'http://192.168.1.83:3300/';
+// const API_BASE_URL = 'http://192.168.1.83:3300/';
+const API_BASE_URL = 'http://192.168.1.69:3300';
+
 // const API_BASE_URL = 'https://movies.mindiii.com/';
 
 const apiInstance = axios.create({
@@ -50,7 +52,7 @@ apiInstance.interceptors.response.use(
   },
   error => {
     const errorData = error?.response?.data;
-    console.log('Error is ----->', error?.response?.data);
+    console.log('Error is ----->', error);
 
     if (errorData?.message) {
       if (
@@ -149,8 +151,16 @@ export const post = async ({url, params, token}) => {
   return response.data;
 };
 
-export const put = async ({url, data}) => {
-  const response = await apiInstance.put(url, data);
+export const put = async ({url, params, token}) => {
+  console.log("Token is ----->", token);
+  
+  const headers = {
+    'access-token': token || '',
+  };
+
+  const response = await apiInstance.put(url, params, {
+    headers,
+  });
   return response.data;
 };
 

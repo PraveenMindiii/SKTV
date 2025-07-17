@@ -18,6 +18,8 @@ const appThemesSlice = createSlice({
       return { ...state, ...action.payload };
     },
     updateAppTheme: (state, action) => {
+      console.log("Theme saved", action.payload);
+      
       return { ...state, ...action.payload };
     },
     setIntialAppTheme: (state, action) => {
