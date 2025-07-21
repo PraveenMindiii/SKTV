@@ -26,11 +26,12 @@ import useTranslate from '../../hooks/useTranslate';
 import {useDispatch, useSelector} from 'react-redux';
 import {UPDATEPROFILE} from '../../services/ApiEndPoints';
 import LoadingOverlay from '../../components/LoadingOverlay';
-import {post} from '../../services/ApiInstance';
+import {post, postwithMultipartData} from '../../services/ApiInstance';
 import {logout, login} from '../../contexts/AuthSlice';
 import {getSafeAreaMode} from '../../contexts/SafeAreaSlice';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import {getThemeMode} from '../../contexts/ThemeSlice';
+import {log} from 'node:console';
 
 const EditProfileScreen = ({navigation}) => {
   const insets = useSelector(getSafeAreaMode);
@@ -53,7 +54,7 @@ const EditProfileScreen = ({navigation}) => {
   const [phoneNumberErrorText, setPhoneNumberErrorText] = useState('');
   const [loading, setLoading] = useState(false);
   const {user} = useSelector(state => state.auth);
-  const appTheme = useSelector(state => state.appthemes)
+  const appTheme = useSelector(state => state.appthemes);
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -69,20 +70,56 @@ const EditProfileScreen = ({navigation}) => {
     navigation.goBack();
   };
 
+  // const callUpdateProfile = useCallback(async () => {
+  //   setLoading(true);
+
+  //   try {
+  //     const response = await post({
+  //       url: UPDATEPROFILE,
+  //       params: {
+  //         fullname: firstName.trim(),
+  //         profileImage: profilePic
+  //           ? profilePic
+  //           : user?.profileImg
+  //           ? user?.profileImg
+  //           : '',
+  //       },
+  //       token: user?.token,
+  //     });
+  //     console.log("Response is _------>", response);
+
+  //     if (response?.code == 200) {
+  //       navigation.goBack();
+  //     }
+  //   } catch (error) {
+  //     console.error('Error Logging in', error);
+  //   } finally {
+  //     setLoading(false);
+  //   }
+  // }, [firstName, profilePic, user?.profileImg, user?.token]);
+
   const callUpdateProfile = useCallback(async () => {
     setLoading(true);
+    const formData = new FormData();
+    // Add text fields
+    formData.append('fullname', firstName.trim());
+    formData.append(
+      'profileImage',
+      profilePic
+        ? {
+            uri: profilePic,
+            name: 'image.jpg',
+            type: 'image/jpeg',
+          }
+        : user?.profileImg,
+    ); // local file URI);
+
+    console.log('Formdata is ----->', JSON.stringify(formData));
 
     try {
-      const response = await post({
-        url: UPDATEPROFILE,
-        params: {
-          fullname: firstName.trim(),
-          profileImage: profilePic
-            ? profilePic
-            : user?.profileImg
-            ? user?.profileImg
-            : '',
-        },
+      const response = await postwithMultipartData({
+        url: UPDATEPROFILE, // your endpoint here
+        params: formData, // pass the FormData object
         token: user?.token,
       });
 
@@ -181,27 +218,29 @@ const EditProfileScreen = ({navigation}) => {
           activeOpacity={1}
           onPressOut={() => setModalVisible(false)}>
           <View style={styles.modalContainer}>
-            <TouchableOpacity style={styles.optionBtn} onPress={openCamera}>
+            <TouchableOpacity
+              activeOpacity={1}
+              style={styles.optionBtn}
+              onPress={openCamera}>
               <Text
                 style={[
                   styles.optionText,
                   {
-                    color: modalVisible
-                      ? Colors.app_primary_color
-                      : Colors.white,
+                    color: appTheme?.themeColor,
                   },
                 ]}>
                 {t('OPEN_CAMERA')}
               </Text>
             </TouchableOpacity>
-            <TouchableOpacity style={styles.optionBtn} onPress={openGallery}>
+            <TouchableOpacity
+              activeOpacity={1}
+              style={styles.optionBtn}
+              onPress={openGallery}>
               <Text
                 style={[
                   styles.optionText,
                   {
-                    color: modalVisible
-                      ? Colors.app_primary_color
-                      : Colors.white,
+                    color: appTheme?.themeColor,
                   },
                 ]}>
                 {t('OPEN_GALLERY')}
@@ -213,7 +252,9 @@ const EditProfileScreen = ({navigation}) => {
                 {backgroundColor: Colors.blankContainer},
               ]}
               onPress={() => setModalVisible(false)}>
-              <Text style={[styles.optionText, {color: '#000'}]}>{t('Cancel')}</Text>
+              <Text style={[styles.optionText, {color: '#000'}]}>
+                {t('Cancel')}
+              </Text>
             </TouchableOpacity>
           </View>
         </TouchableOpacity>
@@ -224,7 +265,7 @@ const EditProfileScreen = ({navigation}) => {
           flex: 1,
           paddingBottom: insets.bottom + 20,
         }}>
-        <View style={{justifyContent: 'space-between', flex: 1,}}>
+        <View style={{justifyContent: 'space-between', flex: 1}}>
           <View>
             <HeadersAppScreen
               TitleName={t('EDITPROFILE')}
@@ -276,7 +317,11 @@ const EditProfileScreen = ({navigation}) => {
                   {t('CHANGEPROFILE')}
                 </Text>
                 <Image
-                  style={{height: 20, width: 20, tintColor: appTheme?.themeColor}}
+                  style={{
+                    height: 20,
+                    width: 20,
+                    tintColor: appTheme?.themeColor,
+                  }}
                   source={require('../../assets/images/tabler_camera.png')}
                 />
               </TouchableOpacity>
@@ -298,7 +343,7 @@ const EditProfileScreen = ({navigation}) => {
                   setFirstNameErrorText('');
                   const filteredText = text.replace(/[^A-Za-z\s]/g, '');
                   setFirstName(filteredText);
-                }} 
+                }}
                 errorMessage={t(firstNameErrorText)}
                 blurOnSubmit={false}
               />

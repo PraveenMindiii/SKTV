@@ -72,5 +72,9 @@
   "Cancel": "取消",
   "LOGOUTALERT": "您确定要退出登录吗？",
   "THEMES": "主题",
-  "APPLIED": "已应用"
+  "APPLIED": "已应用",
+  "session_expire": "会话已过期",
+  "LIGHTMODE": "浅色模式",
+  "APP_LANGUAGE": "应用语言",
+  "APPLY_THEME": "应用主题"
 }

@@ -303,6 +303,7 @@ const PinScreen = ({navigation}) => {
           </TouchableOpacity> */}
             <View style={{height: 110}} />
           </View>
+          <View style={{height: 35}} />
         </ScrollView>
       </KeyboardAwareScrollView>
       {/* </ScrollView> */}

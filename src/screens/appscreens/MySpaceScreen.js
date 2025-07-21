@@ -79,7 +79,7 @@ const MySpaceScreen = ({navigation}) => {
 
       if (response?.code === 200) {
         let data = response?.data;
-        console.log('data is ---->', data);
+        // console.log('data is ---->', data);
         setUserData(data);
         dispatch(login({...data, token: user?.token}));
       }
@@ -109,7 +109,7 @@ const MySpaceScreen = ({navigation}) => {
       <SelectLanguageModel
         visible={isLangugeVisibleModel}
         onClose={() => setIsLangugeVisibleModel(false)}
-        title={'App Language'}
+        title={t('App_Language')}
       />
       <View style={{paddingBottom: insets.bottom + 60}}>
         <View
@@ -353,11 +353,8 @@ const MySpaceScreen = ({navigation}) => {
                 activeOpacity={1}>
                 <View style={{flexDirection: 'row', gap: 15}}>
                   <Image
-                    style={{height: 20, width: 20, resizeMode: 'contain'}}
-                    source={
-                      currentTheme === 'light'
-                        ? require('../../assets/images/icon_light_language.png')
-                        : require('../../assets/images/ico_language.png')
+                    style={{height: 20, width: 20, resizeMode: 'contain', tintColor: currentTheme === 'light' ? "#111111" : "#FFFFFF"}}
+                    source={ require('../../assets/images/ico_theme.png')
                     }
                   />
                   <Text
@@ -413,7 +410,7 @@ const MySpaceScreen = ({navigation}) => {
                     fontFamily: 'Quicksand-Medium',
                     fontSize: 14,
                   }}>
-                  {t('DARKMODE')}
+                  {t('LIGHTMODE')}
                 </Text>
               </View>
               <View>
@@ -426,8 +423,8 @@ const MySpaceScreen = ({navigation}) => {
                   }}
                   source={
                     currentTheme === 'light'
-                      ? require('../../assets/images/icon_famicons_toggle.png')
-                      : require('../../assets/images/famicons_toggle_inactive.png')
+                      ? require('../../assets/images/ico_lightmode_on.png')
+                      : require('../../assets/images/ico_lightmode_off.png')
                   }
                 />
               </View>

@@ -13,6 +13,7 @@ const DropdownComponent = ({data, onClickCallback}) => {
   const currentTheme = useSelector(getThemeMode);
   const dropdawnBgColor = theme('dropdawn_background');
   const heading = theme('heading');
+  const appTheme = useSelector(state => state.appthemes);
   const dropdownData = data.map(item => ({
     ...item,
     season: `${item.season}`,
@@ -36,7 +37,7 @@ const DropdownComponent = ({data, onClickCallback}) => {
         style={[
           styles.dropdown,
           {backgroundColor: dropdawnBgColor},
-          isFocus && {borderColor: Colors.app_primary_color},
+          isFocus && {borderColor: appTheme?.themeColor},
         ]}
         data={dropdownData}
         value={value}

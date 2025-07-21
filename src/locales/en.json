@@ -45,6 +45,7 @@
   "ACCOUNTSETTING": "Account Setting",
   "APPLANGUAGE": "App Language",
   "DARKMODE": "Dark Mode",
+  "LIGHTMODE" : "Light Mode",
   "CHANGEPASSWORD": "Change Password",
   "HELPSUPPORT": "Help & Support",
   "LOGOUT": "Log Out",
@@ -72,5 +73,8 @@
   "Cancel": "Cancel",
   "LOGOUTALERT": "Are you sure you want to logout",
   "THEMES": "Themes",
-  "APPLIED": "APPLIED"
+  "APPLIED": "APPLIED",
+  "session_expire": "Session Expired",
+  "APP_LANGUAGE": "App Language",
+  "APPLY_THEME": "Apply Theme"
 }

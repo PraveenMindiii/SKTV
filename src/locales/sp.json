@@ -72,5 +72,9 @@
   "Cancel": "Cancelar",
   "LOGOUTALERT": "¿Estás seguro de que quieres cerrar sesión?",
   "THEMES": "Temas",
-  "APPLIED": "APLICADO"
+  "APPLIED": "APLICADO",
+  "session_expire": "Sesión expirada",
+  "LIGHTMODE": "Modo claro",
+  "APP_LANGUAGE": "Idioma de la aplicación",
+  "APPLY_THEME": "Aplicar tema"
 }

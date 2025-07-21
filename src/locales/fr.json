@@ -71,5 +71,9 @@
   "Cancel": "Annuler",
   "LOGOUTALERT": "Êtes-vous sûr de vouloir vous déconnecter ?",
   "THEMES": "Thèmes",
-  "APPLIED": "APPLIQUÉ"
+  "APPLIED": "APPLIQUÉ",
+  "session_expire": "Session expirée",
+  "LIGHTMODE": "Mode clair",
+  "APP_LANGUAGE": "Langue de l'application",
+  "APPLY_THEME": "Appliquer le thème"
 }

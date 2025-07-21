@@ -21,7 +21,7 @@ const CustomSearchBar = ({value, onChangeText, autoFocus ,inputRef}) => {
         source={require('../assets/images/ico_search.png')}
       />
       <TextInput
-        style={styles.input}
+        style={[styles.input,{ color: currentTheme == "light" ? "#000000" : "#FFFFFF"}]}
         value={value}
         placeholder={t('SEARCH')}
         placeholderTextColor={'#626262'}
@@ -51,7 +51,6 @@ const styles = StyleSheet.create({
     flex: 1,
     padding: 8,
     fontSize: 18,
-    color: '#fff',
     fontFamily: 'Quicksand-Regular',
   },
   Image: {

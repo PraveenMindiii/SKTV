@@ -1,10 +1,12 @@
 import axios from 'axios';
-import {Platform} from 'react-native';
+import {Alert, Platform} from 'react-native';
 import Config from 'react-native-config';
 import DeviceInfo from 'react-native-device-info';
+import {showSessionExpiredModal} from '../utils/SessionModalController';
+import {getErrorMessage} from '../utils/errorCodes';
 
 // const API_BASE_URL = 'http://192.168.1.83:3300/';
-const API_BASE_URL = 'http://192.168.1.69:3300';
+const API_BASE_URL = 'http://192.168.1.56:3300';
 
 // const API_BASE_URL = 'https://movies.mindiii.com/';
 
@@ -50,9 +52,30 @@ apiInstance.interceptors.response.use(
     console.log('Response interceptor ---->', response);
     return response;
   },
+  // (error) => {
+  //   console.log("API Response: Error-->", JSON.stringify(error));
+  //   // console.log("error?.response?.data?.code -->", error?.data?.code);
+  //   if (error?.response?.data?.code == 104 && error?.status == 401) {
+  //     showSessionExpiredModal();
+  //     return;
+  //   }
+  //   if (error?.response?.data?.code == 105) {
+  //     Alert.alert(
+  //       "Alert",
+  //       error?.response?.data?.message || JSON.stringify(error.message)
+  //     );
+  //   } else if (error?.response?.data?.code) {
+  //     Alert.alert(
+  //       "Alert",
+  //       getErrorMessage(error?.response?.data?.code) ||
+  //         JSON.stringify(error.message)
+  //     );
+  //   }
+  //   return Promise.reject(error);
+  // }
   error => {
     const errorData = error?.response?.data;
-    console.log('Error is ----->', error);
+    console.log('Error is ----->', errorData.code);
 
     if (errorData?.message) {
       if (
@@ -71,7 +94,8 @@ apiInstance.interceptors.response.use(
     } else if (error?.response?.data.code == 103) {
       alert('Please login to mySK first!');
     } else if (error?.response?.data.code == 104) {
-      alert('Your session has expired. Please log in again.');
+      console.log('Coming in 104 block');
+      showSessionExpiredModal();
     } else if (error?.response?.data.code == 105) {
       alert('Please check the information you entered.');
     } else if (error?.response?.data.code == 106) {
@@ -152,8 +176,8 @@ export const post = async ({url, params, token}) => {
 };
 
 export const put = async ({url, params, token}) => {
-  console.log("Token is ----->", token);
-  
+  console.log('Token is ----->', token);
+
   const headers = {
     'access-token': token || '',
   };
@@ -166,6 +190,22 @@ export const put = async ({url, params, token}) => {
 
 export const del = async url => {
   const response = await apiInstance.delete(url);
+  return response.data;
+};
+
+export const postwithMultipartData = async ({url, params, token}) => {
+  console.log('Token post ------->', token);
+  const headers = {
+    'access-token': token || '',
+     'Content-Type': 'multipart/form-data'
+  };
+
+  console.log('Headers ----->', headers);
+
+  const response = await apiInstance.post(url, params, {
+    headers,
+  });
+
   return response.data;
 };
 

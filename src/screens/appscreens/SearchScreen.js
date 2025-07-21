@@ -139,6 +139,7 @@ useFocusEffect(
   };
 
   return (
+    
     <View
       style={{
         flex: 1,
@@ -200,13 +201,13 @@ useFocusEffect(
             <View
               style={{
                 flex: 1,
-                backgroundColor: '#111111',
+                backgroundColor: currentTheme == "light" ? "#FFFFFF" : '#111111',
                 justifyContent: 'center',
                 alignItems: 'center',
               }}>
               <Text
                 style={{
-                  color: 'white',
+                  color: currentTheme == "light" ? "#000000" : "#FFFFFF",
                   fontFamily: 'Quicksand-Regular',
                   fontSize: 18,
                 }}>

@@ -264,7 +264,7 @@ const MovieTvShowsDetailsScreen = ({navigation, route}) => {
 
         <Image
           source={require('../../assets/images/acticon_play.png')}
-          style={{width: 25, height: 25, position: 'absolute', zIndex: 10}}
+          style={{width: 25, height: 25, position: 'absolute', zIndex: 10, tintColor: appTheme?.themeColor}}
         />
       </View>
       <View

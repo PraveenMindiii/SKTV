@@ -357,13 +357,16 @@ const HomeScreen = ({navigation}) => {
                  
                 /> */}
                 <Image
-                  style={[styles.notificationIcon, {tintColor: appTheme?.themeColor}]}
+                  style={[
+                    styles.notificationIcon,
+                    {tintColor: appTheme?.themeColor},
+                  ]}
                   source={
                     currentTheme == 'dark'
                       ? require('../../assets/images/ico_notification_bell1.png')
                       : require('../../assets/images/ico_notification_bell1.png')
                   }
-                  resizeMode={"contain"}
+                  resizeMode={'contain'}
                 />
               </View>
             </View>
@@ -424,18 +427,7 @@ const HomeScreen = ({navigation}) => {
                 contentContainerStyle={{paddingRight: 16}} // optional UI tweak
               />
             </View>
-            {categoryContentList.length > 0 ? (
-              <SectionList
-                contentContainerStyle={{}}
-                sections={categoryContentList}
-                keyExtractor={(item, index) => index.toString()}
-                renderSectionHeader={renderContentHeader}
-                renderItem={renderHorizontalContentList}
-                initialNumToRender={5}
-                windowSize={5}
-                removeClippedSubviews={true}
-              />
-            ) : (
+            {loading ? (
               <View
                 style={{
                   flex: 1,
@@ -448,9 +440,38 @@ const HomeScreen = ({navigation}) => {
                     fontFamily: 'Quicksand-Regular',
                     fontSize: 18,
                   }}>
-                  {'No record found'}
+                  {'Loading...'}
                 </Text>
               </View>
+            ) : categoryContentList.length > 0 ? (
+              <SectionList
+                contentContainerStyle={{}}
+                sections={categoryContentList}
+                keyExtractor={(item, index) => index.toString()}
+                renderSectionHeader={renderContentHeader}
+                renderItem={renderHorizontalContentList}
+                initialNumToRender={5}
+                windowSize={5}
+                removeClippedSubviews={true}
+              />
+            ) : (
+              !loading && (
+                <View
+                  style={{
+                    flex: 1,
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                  }}>
+                  <Text
+                    style={{
+                      color: currentTheme == 'light' ? 'black' : 'white',
+                      fontFamily: 'Quicksand-Regular',
+                      fontSize: 18,
+                    }}>
+                    {'No record found'}
+                  </Text>
+                </View>
+              )
             )}
           </View>
         </ScrollView>

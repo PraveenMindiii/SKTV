@@ -25,9 +25,30 @@ import {useFocusEffect} from '@react-navigation/native';
 import LoadingOverlay from '../../components/LoadingOverlay';
 import apiInstance, {get, put} from '../../services/ApiInstance';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import {getThemeMode} from '../../contexts/ThemeSlice';
+import { log } from 'console';
+import Colors from '../../constants/Colors';
 
 const screenHeight = Dimensions.get('window').height;
 const screenWidth = Dimensions.get('window').width;
+
+const themeBigImg = {
+  '#49DADA_0': require('../../assets/images/themeBigImg/img_theme_tesla_big0.png'),
+  '#49DADA_1': require('../../assets/images/themeBigImg/img_theme_tesla_big1.png'),
+  '#49DADA_2': require('../../assets/images/themeBigImg/img_theme_tesla_big2.png'),
+  '#7F029A_0': require('../../assets/images/themeBigImg/img_theme_vogue_big0.png'),
+  '#7F029A_1': require('../../assets/images/themeBigImg/img_theme_vogue_big1.png'),
+  '#7F029A_2': require('../../assets/images/themeBigImg/img_theme_vogue_big2.png'),
+  '#000000_0': require('../../assets/images/themeBigImg/img_theme_power_big0.png'),
+  '#000000_1': require('../../assets/images/themeBigImg/img_theme_power_big1.png'),
+  '#000000_2': require('../../assets/images/themeBigImg/img_theme_power_big2.png'),
+  '#2C5F34_0': require('../../assets/images/themeBigImg/img_theme_defender_big0.png'),
+  '#2C5F34_1': require('../../assets/images/themeBigImg/img_theme_defender_big1.png'),
+  '#2C5F34_2': require('../../assets/images/themeBigImg/img_theme_defender_big2.png'),
+  '#E9C945_0': require('../../assets/images/themeBigImg/img_theme_festival_big0.png'),
+  '#E9C945_1': require('../../assets/images/themeBigImg/img_theme_festival_big1.png'),
+  '#E9C945_2': require('../../assets/images/themeBigImg/img_theme_festival_big2.png'),
+};
 
 // Theme list
 const arrThemeImages = {
@@ -62,15 +83,16 @@ const AppThemes = ({navigation}) => {
   const {t} = useTranslate();
   // const insets = useSelector(getSafeAreaMode);
   const currentDarkMode = 'dark';
-  const [selectedIndex, setSelectedIndex] = useState();
+  const [selectedIndex, setSelectedIndex] = useState(-1);
   const [appliedTheme, setAppliedTheme] = useState(0);
   const [isModalVisible, setIsModalVisible] = useState(false);
-  const [showImage, setShowImage] = useState(false);
   const dispatch = useDispatch();
   const {user} = useSelector(state => state.auth);
   const appTheme = useSelector(state => state.appthemes);
   const [loading, setLoading] = useState(false);
   const [themeList, setThemeList] = useState([]);
+  const currentTheme = useSelector(getThemeMode);
+  const [bigImg, setBigImg] = useState(null);
 
   useEffect(() => {
     if (user?.token) {
@@ -89,9 +111,13 @@ const AppThemes = ({navigation}) => {
   // }, [themeList]);
 
   const handleShowImage = img => {
-    setSelectedIndex(-1)
-    setIsModalVisible(true);
-    setShowImage(img);
+    console.log("Coming in the show image");
+    
+    if (selectedIndex !== -1) return;
+    if (themeBigImg[img]) {
+      setBigImg(themeBigImg[img]);
+      setIsModalVisible(true);
+    }
   };
 
   const obj = {
@@ -157,21 +183,24 @@ const AppThemes = ({navigation}) => {
     }
   }, [user?.token]);
 
-  const callUpdateUserTheme = useCallback(async themeId => {
+  const callUpdateUserTheme = useCallback(async (themeId, index, obj) => {
     setLoading(true);
 
     try {
       const url = `/themes/changeUserTheme/${themeId}`;
 
-      const response = await put(
-        {
+      const response = await put({
         url: url,
         params: {id: themeId},
         token: user?.token,
       });
 
+      console.log("Response is -----_>", response);
+      
 
-      if (response.status === 200) {
+      if (response?.code === 200) {
+        console.log("Update success");
+        handleApiSuccess(index, obj);
       }
     } catch (error) {
       if (error.response) {
@@ -184,6 +213,15 @@ const AppThemes = ({navigation}) => {
       setLoading(false);
     }
   }, []);
+
+  const handleApiSuccess = async (index, newObj) => {
+    console.log("index and obj are", index, newObj);
+    
+    setAppliedTheme(index);
+    await AsyncStorage.setItem("app_theme", JSON.stringify(newObj));
+    dispatch(updateAppTheme(newObj));
+    setSelectedIndex(-1);
+  };
 
   return (
     <>
@@ -207,45 +245,24 @@ const AppThemes = ({navigation}) => {
                 },
               ]}>
               <TouchableOpacity
+              activeOpacity={1}
                 style={styles.applyButton}
-                onPress={async () => {
-                  setAppliedTheme(selectedIndex);
-                  // dispatch(updateAppTheme(themeList[selectedIndex]));
-                  dispatch(
-                    updateAppTheme({
-                      themeName: themeList[selectedIndex].themeTitle,
-                      themeSubName: themeList[selectedIndex].themeVarient,
-                      themeColor: themeList[selectedIndex].themeColor,
-                      themeGradientColorOne:
-                        themeList[selectedIndex].themeColor,
-                      themeGadientColorSecond: themeList[selectedIndex]
-                        .gradientCode
-                        ? themeList[selectedIndex].themeColor
-                        : themeList[selectedIndex].themeColor,
-                    }),
+                onPress={ () => {
+                
+                 const newObj = {
+                    themeName: themeList[selectedIndex].themeTitle,
+                    themeSubName: themeList[selectedIndex].themeVarient,
+                    themeColor: themeList[selectedIndex].themeColor,
+                    themeGradientColorOne: themeList[selectedIndex].themeColor,
+                    themeGadientColorSecond: themeList[selectedIndex].gradientCode
+                      ? themeList[selectedIndex].themeColor
+                      : themeList[selectedIndex].themeColor,
+                  };
+                  callUpdateUserTheme(
+                    themeList[selectedIndex].themeId,
+                    selectedIndex,
+                    newObj
                   );
-
-                  callUpdateUserTheme(themeList[selectedIndex].themeId);
-                  try {
-                    await AsyncStorage.setItem(
-                      'app_theme',
-                      JSON.stringify({
-                        themeName: themeList[selectedIndex].themeTitle,
-                        themeSubName: themeList[selectedIndex].themeVarient,
-                        themeColor: themeList[selectedIndex].themeColor,
-                        themeGradientColorOne:
-                          themeList[selectedIndex].themeColor,
-                        themeGadientColorSecond: themeList[selectedIndex]
-                          .gradientCode
-                          ? themeList[selectedIndex].themeColor
-                          : themeList[selectedIndex].themeColor,
-                      }),
-                    );
-                    console.log('Theme saved to AsyncStorage');
-                  } catch (error) {
-                    console.error('Failed to save theme:', error);
-                  }
-                  setSelectedIndex(-1);
                 }}>
                 <Text
                   style={{
@@ -270,20 +287,24 @@ const AppThemes = ({navigation}) => {
               alignItems: 'center',
             }}>
             <Image
-              source={showImage}
+              source={
+                bigImg
+                  ? bigImg
+                  : require('../../assets/images/themes/bigViewImage.png')
+              }
               style={{
-                // width: screenWidth * 0.9,
-                // height: screenHeight * 0.85,
-                // aspectRatio: 0.55,
+                width: screenWidth,
+                height: screenHeight * 0.88,
                 resizeMode: 'contain',
                 borderRadius: 30,
               }}
             />
             <TouchableOpacity
+              activeOpacity={1}
               onPress={() => {
                 setIsModalVisible(false);
               }}
-              style={{marginTop: 25}}>
+              style={{marginTop: 15}}>
               <Image
                 style={{height: 40, width: 40, resizeMode: 'contain'}}
                 source={require('../../assets/images/cancle_icon.png')}
@@ -298,19 +319,19 @@ const AppThemes = ({navigation}) => {
             flex: 1,
             paddingBottom: 50,
             marginTop: 0,
-            backgroundColor: '#FFFFFF',
+            backgroundColor: currentTheme == 'dark' ? '#111111' : '#FFFFFF',
             paddingHorizontal: 15,
           }}>
           {/* Status bar */}
           <StatusBar
-            backgroundColor="#FFFFFF"
+            backgroundColor={currentTheme == 'dark' ? '#111111' : '#FFFFFF'}
             translucent={true}
-            barStyle="dark-content"
+            barStyle={currentTheme == 'dark' ? 'light-content' : 'dark-content'}
           />
 
           {/* Top back button and heading */}
           <CommonHeader
-            title={t('themes')}
+            title={t('THEMES')}
             onLeftPress={() => {
               navigation?.goBack();
             }}
@@ -340,6 +361,8 @@ const AppThemes = ({navigation}) => {
                     setSelectedIndex(item.id);
                   }
                 }}
+                currentTheme={currentTheme}
+                themeColor={item.themeColor}
               />
             )}
           />
@@ -360,6 +383,8 @@ const CommonView = ({
   showImage,
   language,
   images,
+  currentTheme,
+  themeColor,
 }) => {
   return (
     <View>
@@ -375,6 +400,7 @@ const CommonView = ({
             fontSize: 15,
             fontFamily: 'Poppins-Bold',
             fontWeight: '500',
+            color: currentTheme == 'dark' ? '#FFFFFF' : '#000000',
           }}>
           {themeTitle}
           <Text
@@ -383,6 +409,7 @@ const CommonView = ({
               fontSize: 15,
               fontFamily: 'Poppins-Medium',
               fontWeight: '500',
+              color: currentTheme == 'dark' ? '#FFFFFF' : '#000000',
             }}>
             {' - '}
             {themeVarient}
@@ -403,8 +430,8 @@ const CommonView = ({
             activeOpacity={1}
             onPress={onSelect}
             style={{
-              height: 23,
-              width: 23,
+              height: 25,
+              width: 25,
               alignItems: 'center',
               justifyContent: 'center',
             }}>
@@ -432,8 +459,9 @@ const CommonView = ({
         }}>
         {images?.map((img, index) => (
           <TouchableOpacity
+          activeOpacity={1}
             onPress={() => {
-              showImage(images[index]);
+              showImage(`${themeColor}_${index}`)
             }}
             style={{
               width: '31%',
@@ -464,6 +492,9 @@ const styles = StyleSheet.create({
     borderTopLeftRadius: 16,
     borderTopRightRadius: 16,
     elevation: 10,
+    borderWidth: 0.5,
+    borderBottomWidth: 0,
+    borderColor: Colors.textGray
   },
   applyButton: {
     backgroundColor: '#FFFFFF',

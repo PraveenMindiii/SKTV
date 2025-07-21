@@ -16,6 +16,7 @@ import {setSafeAreaInsets} from './src/contexts/SafeAreaSlice';
 import {updateAppTheme} from './src/contexts/AppThemesSlice';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { fetchAppTheme } from './src/contexts/FetchAppTheme';
+import { SessionProvider } from './src/utils/SessionContext';
 const App = () => {
   LogBox.ignoreAllLogs(true);
 
@@ -38,6 +39,7 @@ const App = () => {
     <View style={{backgroundColor: Colors.screen_bgcolor, flex: 1}}>
       <NavigationContainer>
         {isLoggedIn ? <AppNavigator /> : <AuthNavigator />}
+        <SessionProvider />
       </NavigationContainer>
     </View>
   );
