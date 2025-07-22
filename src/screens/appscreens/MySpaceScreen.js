@@ -251,7 +251,7 @@ const MySpaceScreen = ({navigation}) => {
             justifyContent: 'space-between',
             flex: 1,
           }}>
-          <View style={{padding: 15}}>
+          <View style={{padding: 15, paddingTop: 20}}>
             <TouchableOpacity
               style={{flexDirection: 'row', justifyContent: 'space-between'}}
               activeOpacity={1}>
@@ -292,7 +292,7 @@ const MySpaceScreen = ({navigation}) => {
               }}
             />
 
-            <TouchableOpacity
+            {/* <TouchableOpacity
               onPress={() => {
                 setIsLangugeVisibleModel(true);
               }}
@@ -338,7 +338,7 @@ const MySpaceScreen = ({navigation}) => {
                 backgroundColor: Colors.blankView,
                 marginTop: 15,
               }}
-            />
+            /> */}
 
             {user?.token && (
               <TouchableOpacity
