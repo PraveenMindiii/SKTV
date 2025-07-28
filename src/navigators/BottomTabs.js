@@ -28,7 +28,7 @@ const BottomTabs = () => {
         <Tab.Screen name="Home" component={HomeScreen} />
         <Tab.Screen name="Search" component={SearchScreen} />
         <Tab.Screen name="MyVideo" component={VideoScreen} />
-        <Tab.Screen name="Music" component={MusicScreen} />
+        {/* <Tab.Screen name="Music" component={MusicScreen} /> */}
         <Tab.Screen name="MySpace" component={MySpaceScreen} />
       </Tab.Navigator>
     </View>

@@ -59,12 +59,16 @@ const HomeScreen = ({navigation}) => {
     callGetGenre();
   }, [activeTab]);
   useEffect(() => {
-    callGetCategoryContentList(selectedGenre);
+    console.log('Use effect called', selectedGenre);
+
+    callGetCategoryContentList(selectedGenre.name, selectedGenre.listCategory);
   }, [selectedGenre]);
 
   const onClickGenre = useCallback(
     (item, index) => {
-      setSelectedGenre(item.name);
+      console.log('Coming in the click block', item);
+
+      setSelectedGenre(item);
       setArrCategoryOfShow(prev => {
         const updated = prev.map((genre, i) => ({
           ...genre,
@@ -99,14 +103,40 @@ const HomeScreen = ({navigation}) => {
       });
 
       if (response.status === 200) {
-        const genreList = [...response.data.data];
-        genreList.unshift({
-          _id: '',
-          genre_type: '',
-          name: '',
-          genre_id: '',
-          isSelected: true,
-        });
+        const fixedGenres = [
+          {
+            _id: '',
+            name: '',
+            genre_type: '',
+            genre_id: '',
+            isSelected: true, // First tab selected by default
+          },
+          {
+            _id: 'recent',
+            name: 'Recent',
+            genre_type: '',
+            listCategory: 'recent',
+            genre_id: '',
+            isSelected: false,
+          },
+          {
+            _id: 'popular',
+            name: 'Popular',
+            listCategory: 'popular',
+            genre_type: '',
+            genre_id: '',
+            isSelected: false,
+          },
+        ];
+        const genreList = [...fixedGenres, ...response.data.data];
+
+        // genreList.unshift({
+        //   _id: '',
+        //   genre_type: '',
+        //   name: '',
+        //   genre_id: '',
+        //   isSelected: true,
+        // });
 
         setArrCategoryOfShow(genreList);
         callGetCategoryContentList('');
@@ -127,12 +157,20 @@ const HomeScreen = ({navigation}) => {
   };
 
   const callGetCategoryContentList = useCallback(
-    async content => {
+    async (content, listType = '') => {
       setLoading(true);
+      console.log('List type is ---->', listType, content);
+
       try {
         const response = await apiInstance.get(CATEGORYCONTENTLIST, {
-          params: {content_type: activeTab, genre: content},
+          params: {
+            content_type: activeTab,
+            genre: (content == "Recent" || content == "Popular") ? "" : content,
+            list_type: listType,
+          },
         });
+
+        console.log('Response category content list ----->', response);
 
         if (response.status === 200 && Array.isArray(response.data.data)) {
           console.log('------->>>>', JSON.stringify(response.data));

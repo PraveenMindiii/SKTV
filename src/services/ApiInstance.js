@@ -38,7 +38,6 @@ apiInstance.interceptors.request.use(
 
     // You can also modify headers or attach tokens here if needed
     // Example: config.headers.Authorization = `Bearer ${token}`;
-
     return config;
   },
   error => {

@@ -32,10 +32,10 @@ const CustomTabBar = ({
       currentTheme == 'dark'
         ? require('../assets/images/ico_video.png')
         : require('../assets/images/icon_vedio_black.png'),
-    Music:
-      currentTheme == 'dark'
-        ? require('../assets/images/ico_music_inactive.png')
-        : require('../assets/images/ico_music_black.png'),
+    // Music:
+    //   currentTheme == 'dark'
+    //     ? require('../assets/images/ico_music_inactive.png')
+    //     : require('../assets/images/ico_music_black.png'),
     MySpace:
       currentTheme == 'dark'
         ? require('../assets/images/ico_WorkSpace.png')
@@ -46,7 +46,7 @@ const CustomTabBar = ({
     Home: require('../assets/images/ico_show_active.png'),
     Search: require('../assets/images/icon_search_selected.png'),
     MyVideo: require('../assets/images/icon_vedio.png'),
-    Music: require('../assets/images/ico_music_active.png'),
+    // Music: require('../assets/images/ico_music_active.png'),
     MySpace: require('../assets/images/icon_profile_selected.png'),
   };
 
@@ -55,7 +55,7 @@ const CustomTabBar = ({
     Search: 'Search',
     MyVideo: 'My Video',
     MySpace: 'My Space',
-    Music: 'Music',
+    // Music: 'Music',
   };
   const insets = useSelector(getSafeAreaMode);
 
