@@ -95,6 +95,8 @@ const HomeScreen = ({navigation}) => {
     }
   }, []);
 
+
+
   const callGetGenre = useCallback(async () => {
     setLoading(true);
     try {
@@ -165,7 +167,7 @@ const HomeScreen = ({navigation}) => {
         const response = await apiInstance.get(CATEGORYCONTENTLIST, {
           params: {
             content_type: activeTab,
-            genre: (content == "Recent" || content == "Popular") ? "" : content,
+            genre: content == 'Recent' || content == 'Popular' ? '' : content,
             list_type: listType,
           },
         });

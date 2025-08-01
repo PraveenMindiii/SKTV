@@ -16,11 +16,12 @@ import SelectLanguageModel from '../../components/SelectLanguageModel';
 import {setTheme, getThemeMode} from '../../contexts/ThemeSlice';
 import useTheme from '../../hooks/useTheme';
 import useTranslate from '../../hooks/useTranslate';
-import {MYPROFILE} from '../../services/ApiEndPoints';
-import apiInstance, {get} from '../../services/ApiInstance';
+import {MYPROFILE, USERLOGOUT} from '../../services/ApiEndPoints';
+import apiInstance, {get, put} from '../../services/ApiInstance';
 import {useFocusEffect} from '@react-navigation/native';
 import {getSafeAreaMode} from '../../contexts/SafeAreaSlice';
 import {updateAppTheme} from '../../contexts/AppThemesSlice';
+import LoadingOverlay from '../../components/LoadingOverlay';
 
 const MySpaceScreen = ({navigation}) => {
   const {theme} = useTheme();
@@ -90,6 +91,35 @@ const MySpaceScreen = ({navigation}) => {
     }
   }, [user?.token]);
 
+  const callUserLogout = useCallback(async () => {
+    console.log("Coming in this block");
+    
+    setLoading(true);
+
+    try {
+      const response = await put({
+        url: USERLOGOUT,
+        params: '',
+        token: user?.token,
+      });
+
+      console.log('Response is -----_>', response);
+
+      if (response?.code === 200) {
+        handleLogout();
+      }
+    } catch (error) {
+      if (error.response) {
+        console.log(
+          'Backend Error Response:',
+          JSON.stringify(error.response.data),
+        );
+      }
+    } finally {
+      setLoading(false);
+    }
+  }, []);
+
   const toggleTheme = () => {
     const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
     dispatch(setTheme(newTheme));
@@ -101,6 +131,7 @@ const MySpaceScreen = ({navigation}) => {
         flexGrow: 1,
         backgroundColor: theme('background'),
       }}>
+      <LoadingOverlay loading={loading} />
       <StatusBar
         backgroundColor={theme('second_background')}
         translucent={false}
@@ -353,9 +384,14 @@ const MySpaceScreen = ({navigation}) => {
                 activeOpacity={1}>
                 <View style={{flexDirection: 'row', gap: 15}}>
                   <Image
-                    style={{height: 20, width: 20, resizeMode: 'contain', tintColor: currentTheme === 'light' ? "#111111" : "#FFFFFF"}}
-                    source={ require('../../assets/images/ico_theme.png')
-                    }
+                    style={{
+                      height: 20,
+                      width: 20,
+                      resizeMode: 'contain',
+                      tintColor:
+                        currentTheme === 'light' ? '#111111' : '#FFFFFF',
+                    }}
+                    source={require('../../assets/images/ico_theme.png')}
                   />
                   <Text
                     style={{
@@ -498,7 +534,7 @@ const MySpaceScreen = ({navigation}) => {
                     {
                       text: 'OK',
                       onPress: () => {
-                        handleLogout();
+                        user?.token ?  callUserLogout() : handleLogout();
                       },
                     },
                   ],

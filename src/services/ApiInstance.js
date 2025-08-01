@@ -6,7 +6,7 @@ import {showSessionExpiredModal} from '../utils/SessionModalController';
 import {getErrorMessage} from '../utils/errorCodes';
 
 // const API_BASE_URL = 'http://192.168.1.83:3300/';
-// const API_BASE_URL = 'http://192.168.1.56:3300';
+// const API_BASE_URL = 'http://192.168.1.76:3300';
 
 const API_BASE_URL = 'https://movies.mindiii.com/';
 
@@ -160,7 +160,7 @@ export const get = async ({url, params, token}) => {
 // };
 
 export const post = async ({url, params, token}) => {
-  console.log('Token post ------->', token);
+  console.log('params post ------->', params);
   const headers = {
     'access-token': token || '',
   };

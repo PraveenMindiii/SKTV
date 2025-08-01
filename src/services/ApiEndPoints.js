@@ -7,3 +7,4 @@ export const VERIFYPIN = '/auth/matchPin';
 export const MYPROFILE = '/profile/myProfile';
 export const UPDATEPROFILE = '/profile/updateProfile';
 export const GETTHEMESLIST = '/themes';
+export const USERLOGOUT = '/profile/logout';
