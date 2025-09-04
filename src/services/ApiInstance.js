@@ -5,10 +5,10 @@ import DeviceInfo from 'react-native-device-info';
 import {showSessionExpiredModal} from '../utils/SessionModalController';
 import {getErrorMessage} from '../utils/errorCodes';
 
-// const API_BASE_URL = 'http://192.168.1.83:3300/';
-// const API_BASE_URL = 'http://192.168.1.76:3300';
+const API_BASE_URL = 'http://192.168.1.68:3300';
+// const API_BASE_URL = 'http://mysk-api.scenekey.com';
 
-const API_BASE_URL = 'https://movies.mindiii.com/';
+// const API_BASE_URL = 'https://movies.mindiii.com/';
 
 const apiInstance = axios.create({
   baseURL: API_BASE_URL,
@@ -74,7 +74,7 @@ apiInstance.interceptors.response.use(
   // }
   error => {
     const errorData = error?.response?.data;
-    console.log('Error is ----->', errorData.code);
+    console.log('Error is ----->', error);
 
     if (errorData?.message) {
       if (
