@@ -5,8 +5,8 @@ import DeviceInfo from 'react-native-device-info';
 import {showSessionExpiredModal} from '../utils/SessionModalController';
 import {getErrorMessage} from '../utils/errorCodes';
 
-const API_BASE_URL = 'http://192.168.1.68:3300';
-// const API_BASE_URL = 'http://mysk-api.scenekey.com';
+// const API_BASE_URL = 'http://192.168.1.68:3300';
+const API_BASE_URL = 'http://mysk-api.scenekey.com';
 
 // const API_BASE_URL = 'https://movies.mindiii.com/';
 
