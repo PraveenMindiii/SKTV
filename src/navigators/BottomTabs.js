@@ -9,16 +9,21 @@ import {useSelector} from 'react-redux';
 import {getThemeMode} from '../contexts/ThemeSlice';
 import MusicScreen from '../screens/appscreens/MusicScreen';
 import { Dimensions, View } from 'react-native';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 const BottomTabs = () => {
   const Tab = createBottomTabNavigator();
+
+  const instets = useSafeAreaInsets()
   const {theme} = useTheme();
   const currentTheme = useSelector(getThemeMode);
   const { width, height } = Dimensions.get("window")
+  console.log(' instets ', instets)
   return (
     <View
       style={{
         width,
-        height,
+        height:height+instets?.bottom,
+        paddingBottom: instets?.bottom
       }}>
       <Tab.Navigator
         screenOptions={{headerShown: false}}
